@@ -201,11 +201,32 @@ def hero_image(page):
 def escape(s): return html.escape(s or "", quote=True)
 
 
+def ui_icon(name, extra_class=""):
+    classes = f"ui-icon {extra_class}".strip()
+    return f'<svg class="{classes}" aria-hidden="true" focusable="false"><use href="/assets/lucide.svg#{name}"></use></svg>'
+
+
+def next_steps():
+    cards = [
+        ("results", "/voor-en-na/", "/assets/source/8905a3cd60.jpg", "Bekijk echte resultaten"),
+        ("price", "/prijzen/", "/assets/source/849b45965c.png", "Ontdek de prijzen"),
+        ("team", "/sarasin-clinic/ons-team/", "/assets/source/cf5f1d632b.png", "Maak kennis met het team"),
+    ]
+    links = "".join(
+        f'''<a class="next-card next-card-{kind}" href="{url}">
+            <div class="next-card-media"><img src="{image}" alt="" loading="lazy" decoding="async"></div>
+            <span class="next-card-label"><strong>{title}</strong>{ui_icon("arrow-right")}</span>
+        </a>'''
+        for kind, url, image, title in cards
+    )
+    return f'''<section class="next-steps"><p class="section-kicker">VERDER LEZEN</p><h2>Een volgende stap, op jouw tempo.</h2><div>{links}</div></section>'''
+
+
 def nav():
-    return '''<header class="site-header"><a class="brand" href="/" aria-label="Haarfillers home"><span class="brand-mark">S</span><span>SARASIN<span class="brand-small">HAARFILLERS</span></span></a>
+    return f'''<header class="site-header"><a class="brand" href="/" aria-label="Haarfillers home"><span class="brand-mark">S</span><span>SARASIN<span class="brand-small">HAARFILLERS</span></span></a>
     <nav class="desktop-nav" aria-label="Hoofdnavigatie"><a href="/mannen/">Voor mannen</a><a href="/vrouwen/">Voor vrouwen</a><a href="/voor-en-na/">Resultaten</a><a href="/prijzen/">Prijzen</a><a href="/sarasin-clinic/">De clinic</a></nav>
-    <a class="header-cta" href="''' + BOOK + '''">Boek consultatie <span aria-hidden="true">↗</span></a><button class="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button></header>
-    <nav class="mobile-nav" aria-label="Mobiele navigatie" hidden><a href="/mannen/">Voor mannen</a><a href="/vrouwen/">Voor vrouwen</a><a href="/voor-en-na/">Resultaten</a><a href="/prijzen/">Prijzen</a><a href="/sarasin-clinic/">De clinic</a><a href="/faq/">Veelgestelde vragen</a><a href="''' + BOOK + '''">Boek consultatie ↗</a></nav>'''
+    <a class="header-cta" href="{BOOK}">Boek consultatie {ui_icon("arrow-up-right")}</a><button class="menu-toggle" aria-label="Open menu" aria-expanded="false">{ui_icon("menu", "menu-open")}{ui_icon("x", "menu-close")}</button></header>
+    <nav class="mobile-nav" aria-label="Mobiele navigatie" hidden><a href="/mannen/">Voor mannen</a><a href="/vrouwen/">Voor vrouwen</a><a href="/voor-en-na/">Resultaten</a><a href="/prijzen/">Prijzen</a><a href="/sarasin-clinic/">De clinic</a><a href="/faq/">Veelgestelde vragen</a><a href="{BOOK}">Boek consultatie {ui_icon("arrow-up-right")}</a></nav>'''
 
 
 def footer():
@@ -224,7 +245,7 @@ def feature_module(page):
     if path == "/":
         man = source_asset("https://www.haarfillers.com/wp-content/uploads/2022/12/2022-12-23_SarasinClinic_Haarfiller-man_06.jpg")
         woman = source_asset("https://www.haarfillers.com/wp-content/uploads/2022/12/2022-12-23_SarasinClinic_Haarfiller-vrouw_03.jpg")
-        return f'''<section class="feature-module pathway-module"><div class="module-heading"><p class="section-kicker">KIES JOUW ROUTE</p><h2>Begin bij jouw verhaal.</h2><p>Haarverlies ziet er bij iedereen anders uit. Lees verder over de behandeling, of start met een persoonlijke consultatie.</p></div><div class="pathway-grid"><a href="/mannen/"><img src="{escape(man)}" alt="Haarfiller foto uit de Sarasin Clinic mannengalerij"><span>Voor mannen</span><strong>Behoud en versterk het haar dat er is.</strong><em>Ontdek de behandeling ↗</em></a><a href="/vrouwen/"><img src="{escape(woman)}" alt="Haarfiller foto uit de Sarasin Clinic vrouwengalerij"><span>Voor vrouwen</span><strong>Een plan dat rekening houdt met jouw haarverlies.</strong><em>Ontdek de behandeling ↗</em></a></div></section>'''
+        return f'''<section class="feature-module pathway-module"><div class="module-heading"><p class="section-kicker">KIES JOUW ROUTE</p><h2>Begin bij jouw verhaal.</h2><p>Haarverlies ziet er bij iedereen anders uit. Lees verder over de behandeling, of start met een persoonlijke consultatie.</p></div><div class="pathway-grid"><a href="/mannen/"><img src="{escape(man)}" alt="Haarfiller foto uit de Sarasin Clinic mannengalerij"><span>Voor mannen</span><strong>Behoud en versterk het haar dat er is.</strong><em>Ontdek de behandeling {ui_icon("arrow-up-right")}</em></a><a href="/vrouwen/"><img src="{escape(woman)}" alt="Haarfiller foto uit de Sarasin Clinic vrouwengalerij"><span>Voor vrouwen</span><strong>Een plan dat rekening houdt met jouw haarverlies.</strong><em>Ontdek de behandeling {ui_icon("arrow-up-right")}</em></a></div></section>'''
     if path == "/prijzen/":
         zones = [
             ("Kleine zone", "1 handpalm · 1 ml", "€210", "https://www.haarfillers.com/wp-content/uploads/2022/06/SarasinClinic_hairfiller_tekening-zone1-200x249-1.png"),
@@ -251,7 +272,7 @@ def feature_module(page):
             ("Sint-Martens-Latem", "Kortrijksesteenweg 20, 9830 Sint-Martens-Latem", "/sarasin-clinic/gent/", "https://www.haarfillers.com/wp-content/uploads/2022/11/SarasinClinic_interieur_Gent_01.jpg"),
             ("Beveren", "Gentseweg 436, 9120 Beveren", "/sarasin-clinic/beveren/", "https://www.haarfillers.com/wp-content/uploads/2025/02/sarasin-clinic_Beveren_interieur_04-768x1024.jpg"),
         ]
-        return '<section class="feature-module places-module"><div class="module-heading"><p class="section-kicker">TWEE LOCATIES</p><h2>Een plek waar je je op je gemak voelt.</h2></div><div class="places-grid">'+''.join(f'<a href="{link}"><img src="{escape(source_asset(im))}" alt="Sarasin Clinic {name}"><h3>{name} ↗</h3><p>{address}</p></a>' for name,address,link,im in places)+'</div></section>'
+        return '<section class="feature-module places-module"><div class="module-heading"><p class="section-kicker">TWEE LOCATIES</p><h2>Een plek waar je je op je gemak voelt.</h2></div><div class="places-grid">'+''.join(f'<a href="{link}"><img src="{escape(source_asset(im))}" alt="Sarasin Clinic {name}"><h3>{name} {ui_icon("arrow-up-right")}</h3><p>{address}</p></a>' for name,address,link,im in places)+'</div></section>'
     if path == "/sarasin-clinic/ons-team/":
         people = [
             ("Karen Sarasin", "Esthetisch verpleegkundige", "https://www.haarfillers.com/wp-content/uploads/2026/09/karen-sarasin.png"),
@@ -264,12 +285,12 @@ def feature_module(page):
         return '<section class="feature-module team-module"><div class="module-heading"><p class="section-kicker">HET TEAM</p><h2>De mensen achter je behandeling.</h2></div><div class="team-grid">'+''.join(f'<figure><img src="{escape(source_asset(im))}" alt="{escape(name)}"><figcaption><strong>{escape(name)}</strong><span>{role}</span></figcaption></figure>' for name,role,im in people)+'</div></section>'
     if path == "/faq/":
         topics = [
-            ("Wat zijn haarfillers?", "Zo werkt de behandeling en voor wie ze bedoeld is.", "/faq/wat-zijn-haarfillers/", "✦"),
-            ("Waarom verlies ik haar?", "Lees over oorzaken van zichtbaar haarverlies.", "/faq/veel-haarverlies/", "↘"),
-            ("Welke behandeling past?", "Vergelijk mogelijke routes en verwachtingen.", "/faq/haaruitval-behandeling/", "○"),
-            ("Hoe groeit haar?", "Begrijp de haarcyclus en wat normaal is.", "/faq/hoe-snel-groeien-haren/", "⌁"),
+            ("Wat zijn haarfillers?", "Zo werkt de behandeling en voor wie ze bedoeld is.", "/faq/wat-zijn-haarfillers/", "syringe"),
+            ("Waarom verlies ik haar?", "Lees over oorzaken van zichtbaar haarverlies.", "/faq/veel-haarverlies/", "chart-no-axes-combined"),
+            ("Welke behandeling past?", "Vergelijk mogelijke routes en verwachtingen.", "/faq/haaruitval-behandeling/", "list-checks"),
+            ("Hoe groeit haar?", "Begrijp de haarcyclus en wat normaal is.", "/faq/hoe-snel-groeien-haren/", "sprout"),
         ]
-        cards = ''.join(f'<a href="{link}"><span class="topic-icon" aria-hidden="true">{icon}</span><h3>{name}</h3><p>{desc}</p><span class="topic-arrow" aria-hidden="true">↗</span></a>' for name,desc,link,icon in topics)
+        cards = ''.join(f'<a href="{link}">{ui_icon(icon, "topic-icon")}<h3>{name}</h3><p>{desc}</p>{ui_icon("arrow-up-right", "topic-arrow")}</a>' for name,desc,link,icon in topics)
         return '<section class="feature-module topics-module"><div class="module-heading"><p class="section-kicker">INFORMATIEHUB</p><h2>Begin met de vraag die jij hebt.</h2><p>De volledige vragen en antwoorden staan verderop op deze pagina.</p></div><div class="topic-grid">'+cards+'</div><p class="illustration-note">De consultatiefoto bovenaan is een illustratie, geen echte Sarasin-patiënt of behandelaar.</p></section>'
     if path in {"/sarasin-clinic/gent/", "/sarasin-clinic/beveren/"}:
         gent = path.endswith("gent/")
@@ -278,7 +299,7 @@ def feature_module(page):
         first = "https://www.haarfillers.com/wp-content/uploads/2022/11/SarasinClinic_interieur_Gent_03.jpg" if gent else "https://www.haarfillers.com/wp-content/uploads/2025/02/sarasin-clinic_Beveren_interieur_01-768x1024.jpg"
         second = "https://www.haarfillers.com/wp-content/uploads/2022/11/SarasinClinic_interieur_Gent_05.jpg" if gent else "https://www.haarfillers.com/wp-content/uploads/2025/02/sarasin-clinic_Beveren_interieur_03-768x1024.jpg"
         map_url = "https://www.google.com/maps/search/?api=1&query=" + ("Kortrijksesteenweg+20+9830+Sint-Martens-Latem" if gent else "Gentseweg+436+9120+Beveren")
-        return f'''<section class="feature-module location-module"><div class="module-heading"><p class="section-kicker">BEZOEK ONS</p><h2>Voel je welkom in {name}.</h2></div><div class="location-layout"><div class="location-photos"><img src="{escape(source_asset(first))}" alt="Interieur Sarasin Clinic {name}"><img src="{escape(source_asset(second))}" alt="Behandelruimte Sarasin Clinic {name}"></div><div class="location-details"><p class="section-kicker">CONTACTGEGEVENS</p><h3>{name}</h3><p>{address}</p><p><a href="tel:+32476689799">+32 476 68 97 99</a><br><a href="mailto:welcome@sarasinclinic.com">welcome@sarasinclinic.com</a></p><a class="button-primary" href="{BOOK}">Boek een afspraak ↗</a><a class="inline-link" href="{map_url}" target="_blank" rel="noopener">Plan je route ↗</a></div></div></section>'''
+        return f'''<section class="feature-module location-module"><div class="module-heading"><p class="section-kicker">BEZOEK ONS</p><h2>Voel je welkom in {name}.</h2></div><div class="location-layout"><div class="location-photos"><img src="{escape(source_asset(first))}" alt="Interieur Sarasin Clinic {name}"><img src="{escape(source_asset(second))}" alt="Behandelruimte Sarasin Clinic {name}"></div><div class="location-details"><p class="section-kicker">CONTACTGEGEVENS</p><h3>{name}</h3><p>{address}</p><p><a href="tel:+32476689799">+32 476 68 97 99</a><br><a href="mailto:welcome@sarasinclinic.com">welcome@sarasinclinic.com</a></p><a class="button-primary" href="{BOOK}">Boek een afspraak {ui_icon("arrow-up-right")}</a><a class="inline-link" href="{map_url}" target="_blank" rel="noopener">Plan je route {ui_icon("arrow-up-right")}</a></div></div></section>'''
     if path == "/reviews/":
         shots = [f"https://www.haarfillers.com/wp-content/uploads/2026/01/haarfiller_review_{i}.png" for i in (1,2,3,4)]
         gallery = ''.join(f'<figure><img src="{escape(source_asset(u))}" alt="Bestaande Sarasin Clinic reviewafbeelding" loading="lazy"></figure>' for u in shots)
@@ -294,8 +315,8 @@ def home_essentials():
         ("Voor wie is de behandeling bedoeld?", "Haarfillers kunnen worden besproken bij beginnend of matig haarverlies, zowel bij mannen als vrouwen. Tijdens een consultatie bekijken we de conditie van je hoofdhuid en haarzakjes."),
         ("Hoe ziet een behandeltraject eruit?", "Na de analyse bespreekt de behandelaar de geschikte zones en het aantal sessies. Een behandeling duurt gemiddeld 30 minuten; opvolging en eventuele onderhoudssessies zijn persoonlijk."),
     ]
-    items = ''.join(f'<details class="essential-item"><summary><span>{escape(question)}</span><span class="essential-plus" aria-hidden="true"></span></summary><p>{escape(answer)}</p></details>' for question,answer in topics)
-    return f'''<section class="home-essentials" aria-labelledby="essentials-title"><div class="essentials-intro"><h2 id="essentials-title">Haarfillers, helder uitgelegd.</h2><p>De belangrijkste informatie op één plek. Verdiep je daarna in de behandeling die bij jouw situatie past.</p><a href="/faq/">Bekijk alle vragen <span aria-hidden="true">↗</span></a></div><div class="essentials-list">{items}</div></section>'''
+    items = ''.join(f'<details class="essential-item"><summary><span>{escape(question)}</span>{ui_icon("plus", "disclosure-plus")}{ui_icon("minus", "disclosure-minus")}</summary><p>{escape(answer)}</p></details>' for question,answer in topics)
+    return f'''<section class="home-essentials" aria-labelledby="essentials-title"><div class="essentials-intro"><h2 id="essentials-title">Haarfillers, helder uitgelegd.</h2><p>De belangrijkste informatie op één plek. Verdiep je daarna in de behandeling die bij jouw situatie past.</p><a href="/faq/">Bekijk alle vragen {ui_icon("arrow-up-right")}</a></div><div class="essentials-list">{items}</div></section>'''
 
 
 def home_reviews():
@@ -305,7 +326,7 @@ def home_reviews():
         ("Een zeer vriendelijke ontvangst gevolgd door een professionele analyse. Ik voelde ook het enthousiasme voor het vak wat altijd veel vertrouwen geeft. Ik boek snel mijn volgende sessie in.", "Edward R.", "Ervaring met Sarasin Clinic"),
     ]
     cards = ''.join(f'<figure class="home-review"><blockquote>“{escape(quote)}”</blockquote><figcaption><strong>{escape(name)}</strong><span>{escape(context)}</span></figcaption></figure>' for quote,name,context in quotes)
-    return f'''<section class="home-reviews" aria-labelledby="home-reviews-title"><div class="home-reviews-head"><div><h2 id="home-reviews-title">Ervaringen, in eigen woorden.</h2><p>Reacties uit de bestaande Sarasin Clinic reviewcollectie. Sommige ervaringen gaan over de clinic in het algemeen.</p></div><a href="/reviews/">Bekijk alle reviews <span aria-hidden="true">↗</span></a></div><div class="home-review-grid">{cards}</div></section>'''
+    return f'''<section class="home-reviews" aria-labelledby="home-reviews-title"><div class="home-reviews-head"><div><h2 id="home-reviews-title">Ervaringen, in eigen woorden.</h2><p>Reacties uit de bestaande Sarasin Clinic reviewcollectie. Sommige ervaringen gaan over de clinic in het algemeen.</p></div><a href="/reviews/">Bekijk alle reviews {ui_icon("arrow-up-right")}</a></div><div class="home-review-grid">{cards}</div></section>'''
 
 
 def page_html(page):
@@ -323,7 +344,7 @@ def page_html(page):
     route_class = "route-" + (path.strip("/").replace("/", "-") or "home")
     priority_css = '<link rel="stylesheet" href="/assets/priority.css">' if path in PRIORITY else ''
     head = f'''<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#18352d"><meta name="robots" content="noindex,follow"><title>{title} | Sarasin Clinic</title><meta name="description" content="{escape(page['description'] or page['intro'][:150])}"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">{priority_css}<script defer src="/assets/site.js"></script></head><body class="page-{category(path)} {route_class}">'''
-    hero_copy = f'''<div class="hero-inner"><p class="hero-kicker">{label}</p><h1>{display_title}</h1><p class="hero-intro">{desc}</p><div class="hero-actions"><a class="button-primary" href="{BOOK}">Boek gratis consultatie <span aria-hidden="true">↗</span></a><a class="button-text" href="/voor-en-na/">Bekijk resultaten <span aria-hidden="true">↗</span></a></div></div>'''
+    hero_copy = f'''<div class="hero-inner"><p class="hero-kicker">{label}</p><h1>{display_title}</h1><p class="hero-intro">{desc}</p><div class="hero-actions"><a class="button-primary" href="{BOOK}">Boek gratis consultatie {ui_icon("arrow-up-right")}</a><a class="button-text" href="/voor-en-na/">Bekijk resultaten {ui_icon("arrow-up-right")}</a></div></div>'''
     if is_home:
         result = source_asset("https://www.haarfillers.com/wp-content/uploads/2022/12/2022-12-23_SarasinClinic_Haarfiller-vrouw_03.jpg")
         hero = f'''<section class="hero home-hero">
@@ -339,8 +360,8 @@ def page_html(page):
     else:
         hero = f'''<section class="hero"><div class="hero-photo"><img src="{escape(photo)}" alt="{display_title}" fetchpriority="high"></div><div class="hero-shade"></div>{hero_copy}<div class="hero-caption">{caption}</div></section>'''
     if is_home:
-        quick = '''<section class="quick-facts"><div><span class="fact-icon">⌁</span><strong>Persoonlijk behandelplan</strong><p>Start met een gratis consultatie.</p></div><div><span class="fact-icon">◷</span><strong>30 minuten</strong><p>Gemiddelde behandeltijd.</p></div><div><span class="fact-icon">€</span><strong>Vanaf €210</strong><p>Per sessie, afhankelijk van de zone.</p></div></section>'''
-        process = '''<section class="process-feature"><div class="process-image"><video controls preload="none" poster="/assets/hairfiller-treatment-poster.jpg" aria-label="Sarasin Clinic behandelvideo"><source src="/assets/hairfiller-treatment.mp4" type="video/mp4">Je browser ondersteunt deze video niet.</video></div><div class="process-copy"><p class="section-kicker">DE BEHANDELING</p><h2>Van analyse tot persoonlijk plan.</h2><p>Een consultatie brengt je haarconditie en verwachtingen in kaart. Daarna bespreekt de behandelaar of haarfillers voor jou geschikt zijn en hoe een behandeltraject kan verlopen.</p><p class="image-disclosure">Echte beelden uit een bestaande Sarasin Clinic behandelvideo.</p><a class="inline-link" href="/videos/">Bekijk alle video's ↗</a></div></section>'''
+        quick = f'''<section class="quick-facts"><div>{ui_icon("clipboard-list", "fact-icon")}<strong>Persoonlijk behandelplan</strong><p>Start met een gratis consultatie.</p></div><div>{ui_icon("clock-3", "fact-icon")}<strong>30 minuten</strong><p>Gemiddelde behandeltijd.</p></div><div>{ui_icon("euro", "fact-icon")}<strong>Vanaf €210</strong><p>Per sessie, afhankelijk van de zone.</p></div></section>'''
+        process = f'''<section class="process-feature"><div class="process-image"><video controls preload="none" poster="/assets/hairfiller-treatment-poster.jpg" aria-label="Sarasin Clinic behandelvideo"><source src="/assets/hairfiller-treatment.mp4" type="video/mp4">Je browser ondersteunt deze video niet.</video></div><div class="process-copy"><p class="section-kicker">DE BEHANDELING</p><h2>Van analyse tot persoonlijk plan.</h2><p>Een consultatie brengt je haarconditie en verwachtingen in kaart. Daarna bespreekt de behandelaar of haarfillers voor jou geschikt zijn en hoe een behandeltraject kan verlopen.</p><p class="image-disclosure">Echte beelden uit een bestaande Sarasin Clinic behandelvideo.</p><a class="inline-link" href="/videos/">Bekijk alle video's {ui_icon("arrow-up-right")}</a></div></section>'''
     else:
         quick = ""
         process = ""
@@ -352,16 +373,18 @@ def page_html(page):
         if len(plain) > 1200 and plain.count("★") >= 10:
             details = body.new_tag("details", attrs={"class": "review-archive"})
             summary = body.new_tag("summary")
-            summary.string = "Lees alle ervaringen en reviews"
+            summary.append("Lees alle ervaringen en reviews")
+            for svg in BeautifulSoup(ui_icon("plus", "disclosure-plus") + ui_icon("minus", "disclosure-minus"), "html.parser").find_all("svg"):
+                summary.append(svg)
             details.append(summary)
             p.wrap(details)
     for i,h in enumerate(body.find_all("h2"),1): h["id"] = f"section-{i}"
     article_lead = f'<div class="article-lead"><p class="section-kicker">VOLLEDIGE INFORMATIE</p><h2>{title}</h2><p>Lees hieronder alle informatie van de bestaande website over dit onderwerp.</p></div>' if path in PRIORITY and not is_home else ''
-    article = home_essentials() + home_reviews() if is_home else f'''<section class="article-shell">{breadcrumb}{article_lead}<div class="article-grid"><aside class="article-aside"><p>Op deze pagina</p><nav aria-label="Op deze pagina">{contents}</nav><a href="{BOOK}">Maak een afspraak ↗</a></aside><article class="source-content">{body}</article></div></section>'''
-    nearby = '''<section class="next-steps"><p class="section-kicker">VERDER LEZEN</p><h2>Een volgende stap, op jouw tempo.</h2><div><a href="/voor-en-na/"><span>01</span><strong>Bekijk echte resultaten</strong><span>↗</span></a><a href="/prijzen/"><span>02</span><strong>Ontdek de prijzen</strong><span>↗</span></a><a href="/sarasin-clinic/ons-team/"><span>03</span><strong>Maak kennis met het team</strong><span>↗</span></a></div></section>'''
+    article = home_essentials() + home_reviews() if is_home else f'''<section class="article-shell">{breadcrumb}{article_lead}<div class="article-grid"><aside class="article-aside"><p>Op deze pagina</p><nav aria-label="Op deze pagina">{contents}</nav><a href="{BOOK}">Maak een afspraak {ui_icon("arrow-up-right")}</a></aside><article class="source-content">{body}</article></div></section>'''
+    nearby = next_steps()
     closing_photo = source_asset("https://www.haarfillers.com/wp-content/uploads/2022/11/SarasinClinic_interieur_Gent_06.jpg") if path in PRIORITY else "/assets/treatment-process.png"
     closing_alt = "Interieur Sarasin Clinic Gent" if path in PRIORITY else "Illustratieve behandeling in een clinic"
-    closing = f'''<section class="closing"><div><p class="section-kicker">SARASIN CLINIC</p><h2>Goed advies begint met goed kijken.</h2><p>Vertel ons wat je merkt aan je haar. Tijdens een gratis consultatie bekijken we samen wat voor jou passend is.</p><a class="button-primary" href="{BOOK}">Boek gratis consultatie ↗</a></div><img src="{escape(closing_photo)}" alt="{closing_alt}" loading="lazy"></section>'''
+    closing = f'''<section class="closing"><div><p class="section-kicker">SARASIN CLINIC</p><h2>Goed advies begint met goed kijken.</h2><p>Vertel ons wat je merkt aan je haar. Tijdens een gratis consultatie bekijken we samen wat voor jou passend is.</p><a class="button-primary" href="{BOOK}">Boek gratis consultatie {ui_icon("arrow-up-right")}</a></div><img src="{escape(closing_photo)}" alt="{closing_alt}" loading="lazy"></section>'''
     strip = "" if path in PRIORITY else visual_strip(page)
     return head + nav() + hero + quick + process + feature_module(page) + strip + article + nearby + closing + footer() + '</body></html>'
 
