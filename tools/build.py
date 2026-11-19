@@ -19,6 +19,12 @@ ASSETS.mkdir(parents=True, exist_ok=True)
 BASE = "https://www.haarfillers.com"
 BOOK = "https://booking.sarasinclinic.com/appointment/locations?strict_subcategory_id=58"
 PRIORITY = {"/", "/mannen/", "/vrouwen/", "/voor-en-na/", "/prijzen/", "/faq/", "/sarasin-clinic/", "/sarasin-clinic/gent/", "/sarasin-clinic/beveren/", "/sarasin-clinic/ons-team/", "/reviews/", "/videos/"}
+TREATMENT_ZONES = (
+    ("Kleine zone", "1 handpalm · 1 ml", "€210", "https://www.haarfillers.com/wp-content/uploads/2022/06/SarasinClinic_hairfiller_tekening-zone1-200x249-1.png"),
+    ("Middelgrote zone", "2 handpalmen · 2 ml", "€310", "https://www.haarfillers.com/wp-content/uploads/2022/06/SarasinClinic_hairfiller_tekening-zone2-200x249-1.png"),
+    ("Grote zone", "3 handpalmen · 3 ml", "€415", "https://www.haarfillers.com/wp-content/uploads/2022/06/SarasinClinic_hairfiller_tekening-zone3-200x249-1.png"),
+)
+
 SHORT_TITLES = {
     "/": "Haarverlies verdient een persoonlijk plan.",
     "/mannen/": "Haarfillers voor mannen.",
@@ -247,12 +253,7 @@ def feature_module(page):
         woman = source_asset("https://www.haarfillers.com/wp-content/uploads/2022/12/2022-12-23_SarasinClinic_Haarfiller-vrouw_03.jpg")
         return f'''<section class="feature-module pathway-module"><div class="module-heading"><p class="section-kicker">KIES JOUW ROUTE</p><h2>Begin bij jouw verhaal.</h2><p>Haarverlies ziet er bij iedereen anders uit. Lees verder over de behandeling, of start met een persoonlijke consultatie.</p></div><div class="pathway-grid"><a href="/mannen/"><img src="{escape(man)}" alt="Haarfiller foto uit de Sarasin Clinic mannengalerij"><span>Voor mannen</span><strong>Behoud en versterk het haar dat er is.</strong><em>Ontdek de behandeling {ui_icon("arrow-up-right")}</em></a><a href="/vrouwen/"><img src="{escape(woman)}" alt="Haarfiller foto uit de Sarasin Clinic vrouwengalerij"><span>Voor vrouwen</span><strong>Een plan dat rekening houdt met jouw haarverlies.</strong><em>Ontdek de behandeling {ui_icon("arrow-up-right")}</em></a></div></section>'''
     if path == "/prijzen/":
-        zones = [
-            ("Kleine zone", "1 handpalm · 1 ml", "€210", "https://www.haarfillers.com/wp-content/uploads/2022/06/SarasinClinic_hairfiller_tekening-zone1-200x249-1.png"),
-            ("Middelgrote zone", "2 handpalmen · 2 ml", "€310", "https://www.haarfillers.com/wp-content/uploads/2022/06/SarasinClinic_hairfiller_tekening-zone2-200x249-1.png"),
-            ("Grote zone", "3 handpalmen · 3 ml", "€415", "https://www.haarfillers.com/wp-content/uploads/2022/06/SarasinClinic_hairfiller_tekening-zone3-200x249-1.png"),
-        ]
-        cards = ''.join(f'<div class="price-card"><img src="{escape(source_asset(im))}" alt="Illustratie {escape(name.lower())}"><div><h3>{name}</h3><p>{size}</p><strong>{price}</strong><span>per sessie</span></div></div>' for name,size,price,im in zones)
+        cards = ''.join(f'<div class="price-card"><img src="{escape(source_asset(im))}" alt="Illustratie {escape(name.lower())}"><div><h3>{name}</h3><p>{size}</p><strong>{price}</strong><span>per sessie</span></div></div>' for name,size,price,im in TREATMENT_ZONES)
         return '<section class="feature-module price-module"><div class="module-heading"><p class="section-kicker">TRANSPARANTE PRIJZEN</p><h2>Een helder overzicht per zone.</h2><p>Het aantal behandelingen en de geschikte zone worden tijdens een consultatie besproken.</p></div><div class="price-grid">'+cards+'</div></section>'
     if path in {"/mannen/", "/vrouwen/"}:
         poster = "/assets/hairfiller-women-poster.jpg" if path == "/vrouwen/" else "/assets/hairfiller-treatment-poster.jpg"
@@ -307,6 +308,50 @@ def feature_module(page):
     if path == "/videos/":
         return '''<section class="feature-module video-feature"><div class="module-heading"><p class="section-kicker">BEKIJK DE BEHANDELING</p><h2>Zie de stappen in plaats van ze alleen te lezen.</h2><p>Twee bestaande Sarasin Clinic video's tonen hoe de hoofdhuid wordt voorbereid en hoe een behandeling verloopt.</p></div><div class="video-grid"><figure><video controls preload="none" poster="/assets/hairfiller-treatment-poster.jpg" aria-label="Haarfiller behandeling"><source src="/assets/hairfiller-treatment.mp4" type="video/mp4">Je browser ondersteunt deze video niet.</video><figcaption><strong>Behandeling in beeld</strong><span>Haarfiller behandeling bij Sarasin Clinic</span></figcaption></figure><figure><video controls preload="none" poster="/assets/hairfiller-women-poster.jpg" aria-label="Haarfiller behandeling bij een vrouw"><source src="/assets/hairfiller-women.mp4" type="video/mp4">Je browser ondersteunt deze video niet.</video><figcaption><strong>Behandeling bij vrouwen</strong><span>Hoofdhuid en behandelzone van dichtbij</span></figcaption></figure></div></section>'''
     return ""
+
+
+def home_results():
+    cases = [
+        ("/assets/source/8905a3cd60.jpg", "De kruin van een man voor en na een haarfillerbehandeling", 653),
+        ("/assets/source/fe5b164a47.jpg", "De haarscheiding van een vrouw voor en na een haarfillerbehandeling", 800),
+    ]
+    photos = "".join(
+        f'''<figure class="home-result-card">
+            <div class="home-result-labels" aria-hidden="true"><span>Voor</span><span>Na</span></div>
+            <img src="{photo}" alt="{alt}" width="800" height="{height}" loading="lazy" decoding="async">
+        </figure>'''
+        for photo, alt, height in cases
+    )
+    return f'''<section class="home-results" id="haarfiller-resultaten" aria-labelledby="home-results-title">
+        <div class="home-preview-heading">
+            <h2 id="home-results-title">Voor en na haarfillers</h2>
+            <p>Foto’s uit de Sarasin Clinic resultatengalerij. Resultaten verschillen per persoon.</p>
+            <a class="inline-link" href="/voor-en-na/">Bekijk alle resultaten {ui_icon("arrow-right")}</a>
+        </div>
+        <div class="home-results-grid">{photos}</div>
+    </section>'''
+
+
+def home_prices():
+    cards = "".join(
+        f'''<li class="home-price-card">
+            <img src="{escape(source_asset(image))}" alt="" width="200" height="249" loading="lazy" decoding="async">
+            <div>
+                <h3>{name}</h3>
+                <p>{size}</p>
+                <p class="home-price-amount"><strong>{price}</strong> <span>per sessie</span></p>
+            </div>
+        </li>'''
+        for name, size, price, image in TREATMENT_ZONES
+    )
+    return f'''<section class="home-prices" id="haarfiller-prijzen" aria-labelledby="home-prices-title">
+        <div class="home-preview-heading">
+            <h2 id="home-prices-title">Prijzen per zone</h2>
+            <p>Tijdens je consultatie bespreken we de behandelzone en hoeveel sessies bij jouw situatie passen.</p>
+            <a class="inline-link" href="/prijzen/">Bekijk alle prijsinformatie {ui_icon("arrow-right")}</a>
+        </div>
+        <ul class="home-price-grid">{cards}</ul>
+    </section>'''
 
 
 def home_essentials():
@@ -448,13 +493,14 @@ def page_html(page):
     for i,h in enumerate(body.find_all("h2"),1): h["id"] = f"section-{i}"
     article_lead = f'<div class="article-lead"><p class="section-kicker">VOLLEDIGE INFORMATIE</p><h2>{title}</h2><p>Lees hieronder alle informatie van de bestaande website over dit onderwerp.</p></div>' if path in PRIORITY and not is_home else ''
     article = home_essentials() + home_clinic() + home_reviews() if is_home else f'''<section class="article-shell">{breadcrumb}{article_lead}<div class="article-grid"><aside class="article-aside"><p>Op deze pagina</p><nav aria-label="Op deze pagina">{contents}</nav><a href="{BOOK}">Maak een afspraak {ui_icon("arrow-up-right")}</a></aside><article class="source-content">{body}</article></div></section>'''
+    previews = home_results() + home_prices() if is_home else ""
     gallery = home_video_gallery() if is_home else ""
     nearby = next_steps()
     closing_photo = source_asset("https://www.haarfillers.com/wp-content/uploads/2022/11/SarasinClinic_interieur_Gent_06.jpg") if path in PRIORITY else "/assets/treatment-process.png"
     closing_alt = "Interieur Sarasin Clinic Gent" if path in PRIORITY else "Illustratieve behandeling in een clinic"
     closing = f'''<section class="closing"><div><p class="section-kicker">SARASIN CLINIC</p><h2>Goed advies begint met goed kijken.</h2><p>Vertel ons wat je merkt aan je haar. Tijdens een gratis consultatie bekijken we samen wat voor jou passend is.</p><a class="button-primary" href="{BOOK}">Boek gratis consultatie {ui_icon("arrow-up-right")}</a></div><img src="{escape(closing_photo)}" alt="{closing_alt}" loading="lazy"></section>'''
     strip = "" if path in PRIORITY else visual_strip(page)
-    return head + nav() + hero + quick + process + feature_module(page) + strip + article + gallery + nearby + closing + footer() + '</body></html>'
+    return head + nav() + hero + quick + process + feature_module(page) + previews + strip + article + gallery + nearby + closing + footer() + '</body></html>'
 
 
 def main():
