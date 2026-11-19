@@ -9,7 +9,7 @@
 .article-lead{width:100%;margin:0 auto;padding:70px 0 82px}.article-lead .section-kicker{color:#a58b61;margin-bottom:20px}.article-lead h2{font:500 clamp(35px,4.6vw,70px)/1.08 Manrope,sans-serif;letter-spacing:-.055em;max-width:17ch;color:var(--forest);margin:0 0 20px}.article-lead>p:last-child{font-size:17px;color:var(--muted);line-height:1.55;max-width:55ch;margin:0}
 .route-home .article-shell,.route-mannen .article-shell,.route-vrouwen .article-shell,.route-voor-en-na .article-shell,.route-prijzen .article-shell,.route-faq .article-shell,.route-sarasin-clinic .article-shell,.route-sarasin-clinic-gent .article-shell,.route-sarasin-clinic-beveren .article-shell,.route-sarasin-clinic-ons-team .article-shell,.route-reviews .article-shell,.route-videos .article-shell{background:#faf9f5}
 .route-home .source-content,.route-mannen .source-content,.route-vrouwen .source-content,.route-voor-en-na .source-content,.route-prijzen .source-content,.route-faq .source-content,.route-sarasin-clinic .source-content,.route-sarasin-clinic-gent .source-content,.route-sarasin-clinic-beveren .source-content,.route-sarasin-clinic-ons-team .source-content,.route-reviews .source-content,.route-videos .source-content{font-size:18px;line-height:1.7;max-width:890px}
-.source-content h2[id]{scroll-margin-top:35px}.source-content h2[id]:not(:first-child){padding-top:36px}.source-content img{border-radius:2px}.source-content p:has(>img){max-width:100%}
+.source-content h2[id]{scroll-margin-top:35px}.source-content h2[id]:not(:first-child){padding-top:36px}.source-content p:has(>img){max-width:100%}
 .pathway-module{background:#e8ede6}.pathway-grid{width:100%;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:20px}.pathway-grid a{position:relative;min-height:620px;display:flex;flex-direction:column;align-items:start;justify-content:end;color:#fff;text-decoration:none;padding:42px;overflow:hidden;background:#2c493f}.pathway-grid a::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,31,24,.85),rgba(10,31,24,.08) 75%);transition:background .3s}.pathway-grid img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s}.pathway-grid a:hover img{transform:scale(1.04)}.pathway-grid span,.pathway-grid strong,.pathway-grid em{z-index:1;position:relative}.pathway-grid span{font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}.pathway-grid strong{font:500 clamp(30px,3.3vw,50px)/1.08 Manrope,sans-serif;letter-spacing:-.055em;max-width:14ch;margin:15px 0 26px}.pathway-grid em{font-size:14px;font-style:normal;font-weight:700;border-bottom:1px solid #fff;padding-bottom:7px}
 .journey-layout video{display:block;width:100%;height:580px;object-fit:cover;background:#1b362c}.journey-steps p{border-color:#bdcbbd}.journey-steps strong{font-family:Manrope,sans-serif;font-size:20px;letter-spacing:-.025em}.journey-steps span{font-size:16px}.journey-layout figure figcaption{margin-top:11px}
 .price-module{background:#e8ede6}.price-grid{gap:16px}.price-card{border-top:4px solid var(--forest);box-shadow:none;transition:transform .25s}.price-card:hover{transform:translateY(-5px)}.price-card img{filter:contrast(1.08)}.price-card strong{color:var(--forest)}
@@ -117,7 +117,7 @@
   place-items: center;
   aspect-ratio: 4 / 5;
   max-height: min(340px, 65vh);
-  border-radius: 14px;
+  border-radius: var(--radius-media);
   overflow: hidden;
   background: var(--forest-deep);
 }
@@ -148,7 +148,7 @@
   width: min(680px, calc(100% - 32px));
   max-height: calc(100dvh - 24px);
   border: 0;
-  border-radius: 16px;
+  border-radius: var(--radius-surface);
   padding: clamp(14px, 3vw, 24px);
   background: var(--paper);
   color: var(--forest);
@@ -158,7 +158,7 @@
 .video-dialog-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .video-dialog-header h3 { margin: 0; font: 700 clamp(17px, 3vw, 24px)/1.25 Manrope, sans-serif; }
 .video-dialog-close { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border: 0; border-radius: 50%; color: var(--forest); background: var(--sage); font-size: 22px; cursor: pointer; }
-.video-dialog-player { display: grid; place-items: center; border-radius: 8px; overflow: hidden; background: var(--forest-deep); }
+.video-dialog-player { display: grid; place-items: center; border-radius: var(--radius-detail); overflow: hidden; background: var(--forest-deep); }
 .video-dialog video { display: block; width: auto; max-width: 100%; height: min(62vh, 540px); object-fit: contain; }
 .video-dialog iframe { width: 100%; aspect-ratio: 16 / 9; max-height: 62vh; border: 0; }
 .video-dialog-source { margin-top: 14px; font-size: 14px; }
@@ -228,7 +228,7 @@
   display: flex;
   flex-direction: column;
   background: var(--paper);
-  border-radius: 14px;
+  border-radius: var(--radius-surface);
   overflow: hidden;
   text-decoration: none;
   color: var(--forest);
@@ -259,3 +259,21 @@
   .home-clinic-photos { gap: 8px; }
   .clinic-preview-label { align-items: start; }
 }
+
+.pathway-grid a,
+.topic-grid a,
+.location-layout,
+.review-mosaic figure,
+.home-review,
+.video-grid figure {
+  border-radius: var(--radius-surface);
+}
+
+.location-photos img,
+.review-mosaic img,
+.video-grid video,
+.transformation-photo img {
+  border-radius: var(--radius-media);
+}
+
+.transformation-labels span { border-radius: var(--radius-pill); }
