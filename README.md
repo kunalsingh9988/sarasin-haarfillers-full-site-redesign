@@ -6,7 +6,7 @@ This is a public, static review build of [Haarfillers.com](https://www.haarfille
 
 The redesign uses a forest green, warm ivory, and muted gold visual system across every page. It adds image-led heroes, a consistent navigation and footer, visual summaries for key treatment pages, a prices comparison, a treatment journey, a real-results gallery, team and clinic visual sections, and easier in-page reading navigation. The original page copy is retained in the article area. Extra visual summaries are additive.
 
-The twelve primary routes (`/`, `/mannen/`, `/vrouwen/`, `/voor-en-na/`, `/prijzen/`, `/faq/`, `/sarasin-clinic/`, both locations, `/sarasin-clinic/ons-team/`, `/reviews/`, and `/videos/`) receive a second editorial pass with purpose-built hero copy and modules. The original titles and full source information remain visible below the new visual introductions.
+The twelve primary routes (`/`, `/mannen/`, `/vrouwen/`, `/voor-en-na/`, `/prijzen/`, `/faq/`, `/sarasin-clinic/`, both locations, `/sarasin-clinic/ons-team/`, `/reviews/`, and `/videos/`) receive a second editorial pass with purpose-built hero copy and modules. The homepage now uses a short treatment guide and a separate review section in place of the imported full-content block, which repeated navigation, imagery, videos, and a lengthy review archive. The other priority routes retain their source information below the visual introductions.
 
 The user supplied [NeoYou's Dr. CYJ page](https://neoyou.netlify.app/en/dr-cyj-hair-fillers/) and [Dokter Frodo](https://www.dokterfrodo.nl/en) as inspiration. Their content, branding, and imagery were not copied. The direction uses clear treatment steps and pricing, real clinic photography, and practitioner-led trust cues.
 

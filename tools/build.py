@@ -289,6 +289,26 @@ def feature_module(page):
     return ""
 
 
+def home_essentials():
+    topics = [
+        ("Wat zijn haarfillers?", "Hair Fillers bevatten onder andere hyaluronzuur en een complex van biomimetische peptiden. De behandeling wordt met kleine injecties in de hoofdhuid toegepast."),
+        ("Voor wie is de behandeling bedoeld?", "Haarfillers kunnen worden besproken bij beginnend of matig haarverlies, zowel bij mannen als vrouwen. Tijdens een consultatie bekijken we de conditie van je hoofdhuid en haarzakjes."),
+        ("Hoe ziet een behandeltraject eruit?", "Na de analyse bespreekt de behandelaar de geschikte zones en het aantal sessies. Een behandeling duurt gemiddeld 30 minuten; opvolging en eventuele onderhoudssessies zijn persoonlijk."),
+    ]
+    items = ''.join(f'<details class="essential-item"><summary><span>{escape(question)}</span><span class="essential-plus" aria-hidden="true"></span></summary><p>{escape(answer)}</p></details>' for question,answer in topics)
+    return f'''<section class="home-essentials" aria-labelledby="essentials-title"><div class="essentials-intro"><h2 id="essentials-title">Haarfillers, helder uitgelegd.</h2><p>De belangrijkste informatie op één plek. Verdiep je daarna in de behandeling die bij jouw situatie past.</p><a href="/faq/">Bekijk alle vragen <span aria-hidden="true">↗</span></a></div><div class="essentials-list">{items}</div></section>'''
+
+
+def home_reviews():
+    quotes = [
+        ("Heel vriendelijke ontvangst, en duidelijke uitleg. Ik kwam voor de hairfiller behandeling, en ben nu heel benieuwd naar het resultaat", "Anja", "Ervaring met een haarfillerbehandeling"),
+        ("Heel vriendelijke ontvangst en je wordt heel goed begeleid en geïnformeerd over wat er precies gaat gebeuren tijdens de behandeling. Zeer aan te raden !", "Wendy N.", "Ervaring met Sarasin Clinic"),
+        ("Een zeer vriendelijke ontvangst gevolgd door een professionele analyse. Ik voelde ook het enthousiasme voor het vak wat altijd veel vertrouwen geeft. Ik boek snel mijn volgende sessie in.", "Edward R.", "Ervaring met Sarasin Clinic"),
+    ]
+    cards = ''.join(f'<figure class="home-review"><blockquote>“{escape(quote)}”</blockquote><figcaption><strong>{escape(name)}</strong><span>{escape(context)}</span></figcaption></figure>' for quote,name,context in quotes)
+    return f'''<section class="home-reviews" aria-labelledby="home-reviews-title"><div class="home-reviews-head"><div><h2 id="home-reviews-title">Ervaringen, in eigen woorden.</h2><p>Reacties uit de bestaande Sarasin Clinic reviewcollectie. Sommige ervaringen gaan over de clinic in het algemeen.</p></div><a href="/reviews/">Bekijk alle reviews <span aria-hidden="true">↗</span></a></div><div class="home-review-grid">{cards}</div></section>'''
+
+
 def page_html(page):
     if page.get("redirect"):
         dest = escape(page["redirect"])
@@ -323,8 +343,8 @@ def page_html(page):
             details.append(summary)
             p.wrap(details)
     for i,h in enumerate(body.find_all("h2"),1): h["id"] = f"section-{i}"
-    article_lead = f'<div class="article-lead"><p class="section-kicker">VOLLEDIGE INFORMATIE</p><h2>{title}</h2><p>Lees hieronder alle informatie van de bestaande website over dit onderwerp.</p></div>' if path in PRIORITY else ''
-    article = f'''<section class="article-shell">{breadcrumb}{article_lead}<div class="article-grid"><aside class="article-aside"><p>Op deze pagina</p><nav aria-label="Op deze pagina">{contents}</nav><a href="{BOOK}">Maak een afspraak ↗</a></aside><article class="source-content">{body}</article></div></section>'''
+    article_lead = f'<div class="article-lead"><p class="section-kicker">VOLLEDIGE INFORMATIE</p><h2>{title}</h2><p>Lees hieronder alle informatie van de bestaande website over dit onderwerp.</p></div>' if path in PRIORITY and not is_home else ''
+    article = home_essentials() + home_reviews() if is_home else f'''<section class="article-shell">{breadcrumb}{article_lead}<div class="article-grid"><aside class="article-aside"><p>Op deze pagina</p><nav aria-label="Op deze pagina">{contents}</nav><a href="{BOOK}">Maak een afspraak ↗</a></aside><article class="source-content">{body}</article></div></section>'''
     nearby = '''<section class="next-steps"><p class="section-kicker">VERDER LEZEN</p><h2>Een volgende stap, op jouw tempo.</h2><div><a href="/voor-en-na/"><span>01</span><strong>Bekijk echte resultaten</strong><span>↗</span></a><a href="/prijzen/"><span>02</span><strong>Ontdek de prijzen</strong><span>↗</span></a><a href="/sarasin-clinic/ons-team/"><span>03</span><strong>Maak kennis met het team</strong><span>↗</span></a></div></section>'''
     closing_photo = source_asset("https://www.haarfillers.com/wp-content/uploads/2022/11/SarasinClinic_interieur_Gent_06.jpg") if path in PRIORITY else "/assets/treatment-process.png"
     closing_alt = "Interieur Sarasin Clinic Gent" if path in PRIORITY else "Illustratieve behandeling in een clinic"
