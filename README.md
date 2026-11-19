@@ -6,6 +6,8 @@ This is a public, static review build of [Haarfillers.com](https://www.haarfille
 
 The redesign uses a forest green, warm ivory, and muted gold visual system across every page. It adds image-led heroes, a consistent navigation and footer, visual summaries for key treatment pages, a prices comparison, a treatment journey, a real-results gallery, team and clinic visual sections, and easier in-page reading navigation. The original page copy is retained in the article area. Extra visual summaries are additive.
 
+The twelve primary routes (`/`, `/mannen/`, `/vrouwen/`, `/voor-en-na/`, `/prijzen/`, `/faq/`, `/sarasin-clinic/`, both locations, `/sarasin-clinic/ons-team/`, `/reviews/`, and `/videos/`) receive a second editorial pass with purpose-built hero copy and modules. The original titles and full source information remain visible below the new visual introductions.
+
 The user supplied [NeoYou's Dr. CYJ page](https://neoyou.netlify.app/en/dr-cyj-hair-fillers/) and [Dokter Frodo](https://www.dokterfrodo.nl/en) as inspiration. Their content, branding, and imagery were not copied. The direction uses clear treatment steps and pricing, real clinic photography, and practitioner-led trust cues.
 
 ## Content and image provenance
@@ -13,6 +15,8 @@ The user supplied [NeoYou's Dr. CYJ page](https://neoyou.netlify.app/en/dr-cyj-h
 - `content-inventory.json` records the source URL and original rendered text for each generated route.
 - `assets/source/` holds 143 images downloaded from the existing public Haarfillers.com pages. This includes the site's existing result, staff, clinic, and zone images. No patient result was generated or retouched.
 - `assets/treatment-process.png` is an AI-generated illustrative treatment image. It is labeled as an illustration wherever featured prominently; it must not be presented as a real Sarasin patient or staff member.
+- `assets/consultation-illustration.png` is an AI-generated consultation scene used on the homepage and FAQ hero. Both heroes explicitly label it as illustrative.
+- `assets/hairfiller-treatment.mp4` and `assets/hairfiller-women.mp4` are unaltered treatment videos downloaded from the existing Haarfillers.com uploads. Their poster frames were extracted locally from those videos.
 - Existing medical and pricing wording is reproduced from the live pages, including any source inconsistencies. Clinical, legal, price, and consent review is needed before using this as the primary production site.
 
 ## Run and rebuild
