@@ -319,6 +319,38 @@ def home_essentials():
     return f'''<section class="home-essentials" aria-labelledby="essentials-title"><div class="essentials-intro"><h2 id="essentials-title">Haarfillers, helder uitgelegd.</h2><p>De belangrijkste informatie op één plek. Verdiep je daarna in de behandeling die bij jouw situatie past.</p><a href="/faq/">Bekijk alle vragen {ui_icon("arrow-up-right")}</a></div><div class="essentials-list">{items}</div></section>'''
 
 
+def home_clinic():
+    locations = [
+        ("Gent", "Sint-Martens-Latem", "/sarasin-clinic/gent/", "/assets/source/aec4456964.jpg", "Behandelruimte van Sarasin Clinic bij Gent"),
+        ("Beveren", "Regio Antwerpen", "/sarasin-clinic/beveren/", "/assets/source/4945f99663.jpg", "Voorgevel van Sarasin Clinic in Beveren"),
+    ]
+    cards = "".join(
+        f'''<a href="{url}" class="clinic-preview">
+            <img src="{photo}" alt="{alt}" loading="lazy" decoding="async">
+            <span class="clinic-preview-label">
+                <span><strong>{name}</strong><small>{region}</small></span>
+                {ui_icon("arrow-right")}
+            </span>
+        </a>'''
+        for name, region, url, photo, alt in locations
+    )
+    return f'''<section class="home-clinic" id="sarasin-locaties" aria-labelledby="home-clinic-title">
+        <div class="home-clinic-copy">
+            <h2 id="home-clinic-title">Haarfillers in Gent en Beveren.</h2>
+            <p>Bij Sarasin Clinic helpen we vrouwen en mannen met haarverlies. Tijdens een gratis consultatie bespreken we je hoofdhuid, je verwachtingen en de voorbereiding en nazorg.</p>
+            <ul class="home-clinic-points">
+                <li>{ui_icon("list-checks")}<span>Meer dan 10 jaar ervaring in esthetische zorg</span></li>
+                <li>{ui_icon("clipboard-list")}<span>Persoonlijk advies in alle privacy</span></li>
+            </ul>
+            <div class="home-clinic-actions">
+                <a class="button-primary" href="{BOOK}">Boek gratis consultatie {ui_icon("arrow-up-right")}</a>
+                <a class="inline-link" href="/sarasin-clinic/">Over Sarasin Clinic {ui_icon("arrow-right")}</a>
+            </div>
+        </div>
+        <div class="home-clinic-photos">{cards}</div>
+    </section>'''
+
+
 def home_reviews():
     quotes = [
         ("Heel vriendelijke ontvangst, en duidelijke uitleg. Ik kwam voor de hairfiller behandeling, en ben nu heel benieuwd naar het resultaat", "Anja", "Ervaring met een haarfillerbehandeling"),
@@ -415,7 +447,7 @@ def page_html(page):
             p.wrap(details)
     for i,h in enumerate(body.find_all("h2"),1): h["id"] = f"section-{i}"
     article_lead = f'<div class="article-lead"><p class="section-kicker">VOLLEDIGE INFORMATIE</p><h2>{title}</h2><p>Lees hieronder alle informatie van de bestaande website over dit onderwerp.</p></div>' if path in PRIORITY and not is_home else ''
-    article = home_essentials() + home_reviews() if is_home else f'''<section class="article-shell">{breadcrumb}{article_lead}<div class="article-grid"><aside class="article-aside"><p>Op deze pagina</p><nav aria-label="Op deze pagina">{contents}</nav><a href="{BOOK}">Maak een afspraak {ui_icon("arrow-up-right")}</a></aside><article class="source-content">{body}</article></div></section>'''
+    article = home_essentials() + home_clinic() + home_reviews() if is_home else f'''<section class="article-shell">{breadcrumb}{article_lead}<div class="article-grid"><aside class="article-aside"><p>Op deze pagina</p><nav aria-label="Op deze pagina">{contents}</nav><a href="{BOOK}">Maak een afspraak {ui_icon("arrow-up-right")}</a></aside><article class="source-content">{body}</article></div></section>'''
     gallery = home_video_gallery() if is_home else ""
     nearby = next_steps()
     closing_photo = source_asset("https://www.haarfillers.com/wp-content/uploads/2022/11/SarasinClinic_interieur_Gent_06.jpg") if path in PRIORITY else "/assets/treatment-process.png"
