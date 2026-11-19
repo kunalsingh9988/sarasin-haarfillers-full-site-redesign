@@ -179,7 +179,6 @@ def category(path):
 def hero_image(page):
     path = page["path"]
     curated = {
-        "/": "/assets/consultation-illustration.png",
         "/mannen/": "https://www.haarfillers.com/wp-content/uploads/2022/12/2022-12-23_SarasinClinic_Haarfiller-man_06.jpg",
         "/vrouwen/": "https://www.haarfillers.com/wp-content/uploads/2022/12/2022-12-23_SarasinClinic_Haarfiller-vrouw_03.jpg",
         "/voor-en-na/": "https://www.haarfillers.com/wp-content/uploads/2023/09/2023-09_haarfiller-man_04.jpg",
@@ -316,15 +315,29 @@ def page_html(page):
     path = page["path"]
     is_home = path == "/"
     label = {"home":"SARASIN CLINIC", "men":"VOOR MANNEN", "women":"VOOR VROUWEN", "clinic":"ONZE CLINIC", "feature":"ONTDEK MEER", "guide":"HAAR & HOOFDHUID", "transplant":"BEHANDELINGEN"}[category(path)]
-    photo = hero_image(page)
+    photo = hero_image(page) if not is_home else None
     title = escape(page["title"])
     display_title = escape(SHORT_TITLES.get(path, page["title"]))
     desc = escape(HERO_DECKS.get(path, page["intro"][:400]))
-    caption = "Illustratieve consultatiescène · geen Sarasin-patiënt of medewerker" if path in {"/", "/faq/"} else "Sarasin Clinic · Gent & Beveren"
+    caption = "Illustratieve consultatiescène · geen Sarasin-patiënt of medewerker" if path == "/faq/" else "Sarasin Clinic · Gent & Beveren"
     route_class = "route-" + (path.strip("/").replace("/", "-") or "home")
     priority_css = '<link rel="stylesheet" href="/assets/priority.css">' if path in PRIORITY else ''
     head = f'''<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#18352d"><meta name="robots" content="noindex,follow"><title>{title} | Sarasin Clinic</title><meta name="description" content="{escape(page['description'] or page['intro'][:150])}"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">{priority_css}<script defer src="/assets/site.js"></script></head><body class="page-{category(path)} {route_class}">'''
-    hero = f'''<section class="hero"><div class="hero-photo"><img src="{escape(photo)}" alt="{display_title}" fetchpriority="high"></div><div class="hero-shade"></div><div class="hero-inner"><p class="hero-kicker">{label}</p><h1>{display_title}</h1><p class="hero-intro">{desc}</p><div class="hero-actions"><a class="button-primary" href="{BOOK}">Boek gratis consultatie <span aria-hidden="true">↗</span></a><a class="button-text" href="/voor-en-na/">Bekijk resultaten <span aria-hidden="true">↗</span></a></div></div><div class="hero-caption">{caption}</div></section>'''
+    hero_copy = f'''<div class="hero-inner"><p class="hero-kicker">{label}</p><h1>{display_title}</h1><p class="hero-intro">{desc}</p><div class="hero-actions"><a class="button-primary" href="{BOOK}">Boek gratis consultatie <span aria-hidden="true">↗</span></a><a class="button-text" href="/voor-en-na/">Bekijk resultaten <span aria-hidden="true">↗</span></a></div></div>'''
+    if is_home:
+        result = source_asset("https://www.haarfillers.com/wp-content/uploads/2022/12/2022-12-23_SarasinClinic_Haarfiller-vrouw_03.jpg")
+        hero = f'''<section class="hero home-hero">
+    {hero_copy}
+    <figure class="home-transformation">
+        <div class="transformation-photo">
+            <img src="{escape(result)}" width="800" height="693" alt="Bovenaanzicht van dezelfde hoofdhuid voor en na een haarfillerbehandeling bij Sarasin Clinic" fetchpriority="high">
+            <div class="transformation-labels" aria-hidden="true"><span>Voor</span><span>Na</span></div>
+        </div>
+        <figcaption>Voor en na bij Sarasin Clinic. Resultaten verschillen per persoon.</figcaption>
+    </figure>
+</section>'''
+    else:
+        hero = f'''<section class="hero"><div class="hero-photo"><img src="{escape(photo)}" alt="{display_title}" fetchpriority="high"></div><div class="hero-shade"></div>{hero_copy}<div class="hero-caption">{caption}</div></section>'''
     if is_home:
         quick = '''<section class="quick-facts"><div><span class="fact-icon">⌁</span><strong>Persoonlijk behandelplan</strong><p>Start met een gratis consultatie.</p></div><div><span class="fact-icon">◷</span><strong>30 minuten</strong><p>Gemiddelde behandeltijd.</p></div><div><span class="fact-icon">€</span><strong>Vanaf €210</strong><p>Per sessie, afhankelijk van de zone.</p></div></section>'''
         process = '''<section class="process-feature"><div class="process-image"><video controls preload="none" poster="/assets/hairfiller-treatment-poster.jpg" aria-label="Sarasin Clinic behandelvideo"><source src="/assets/hairfiller-treatment.mp4" type="video/mp4">Je browser ondersteunt deze video niet.</video></div><div class="process-copy"><p class="section-kicker">DE BEHANDELING</p><h2>Van analyse tot persoonlijk plan.</h2><p>Een consultatie brengt je haarconditie en verwachtingen in kaart. Daarna bespreekt de behandelaar of haarfillers voor jou geschikt zijn en hoe een behandeltraject kan verlopen.</p><p class="image-disclosure">Echte beelden uit een bestaande Sarasin Clinic behandelvideo.</p><a class="inline-link" href="/videos/">Bekijk alle video's ↗</a></div></section>'''
