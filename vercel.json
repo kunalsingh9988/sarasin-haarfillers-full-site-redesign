@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "redirects": [
+    { "source": "/boek-afspraak", "destination": "https://booking.sarasinclinic.com/appointment/locations?strict_subcategory_id=58", "permanent": false },
+    { "source": "/boek-afspraak/", "destination": "https://booking.sarasinclinic.com/appointment/locations?strict_subcategory_id=58", "permanent": false },
+    { "source": "/afspraak-boeken", "destination": "https://booking.sarasinclinic.com/appointment/locations?strict_subcategory_id=58", "permanent": false },
+    { "source": "/afspraak-boeken/", "destination": "https://booking.sarasinclinic.com/appointment/locations?strict_subcategory_id=58", "permanent": false }
+  ],
+  "headers": [
+    { "source": "/(.*)", "headers": [
+      { "key": "X-Robots-Tag", "value": "noindex, follow" },
+      { "key": "X-Content-Type-Options", "value": "nosniff" },
+      { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+    ] }
+  ]
+}
