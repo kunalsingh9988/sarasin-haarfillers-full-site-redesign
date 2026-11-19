@@ -329,6 +329,41 @@ def home_reviews():
     return f'''<section class="home-reviews" aria-labelledby="home-reviews-title"><div class="home-reviews-head"><div><h2 id="home-reviews-title">Ervaringen, in eigen woorden.</h2><p>Reacties uit de bestaande Sarasin Clinic reviewcollectie. Sommige ervaringen gaan over de clinic in het algemeen.</p></div><a href="/reviews/">Bekijk alle reviews {ui_icon("arrow-up-right")}</a></div><div class="home-review-grid">{cards}</div></section>'''
 
 
+def home_video_gallery():
+    clips = [
+        ("Zo verloopt de behandeling", "/assets/hairfiller-treatment-poster.jpg", "/assets/hairfiller-treatment.mp4", ""),
+        ("Haarfillers bij vrouwen", "/assets/hairfiller-women-poster.jpg", "/assets/hairfiller-women.mp4", ""),
+        ("Tussentijds resultaat", "/assets/hairfiller-progress-poster.webp", "/assets/hairfiller-progress.mp4", ""),
+        ("Hairfiller Magic met Peter Vanlaet", "/assets/hairfiller-magic-poster.webp", "https://www.youtube.com/watch?v=WdqKQ2NF8t8", "WdqKQ2NF8t8"),
+        ("Voor en na bij een man", "/assets/hairfiller-story-poster.webp", "/assets/hairfiller-story.mp4", ""),
+    ]
+    cards = []
+    for title, poster, url, youtube_id in clips:
+        embed = f' data-youtube="{youtube_id}"' if youtube_id else ""
+        cards.append(f'''<a class="video-preview" href="{url}"{embed}>
+            <span class="video-preview-media">
+                <img src="{poster}" alt="" loading="lazy" decoding="async">
+                <span class="video-preview-play">{ui_icon("play")}</span>
+            </span>
+            <strong>{escape(title)}</strong>
+        </a>''')
+    return f'''<section class="home-videos" aria-labelledby="home-videos-title" id="haarfiller-videos">
+    <div class="home-videos-heading">
+        <h2 id="home-videos-title">Video’s over haarfillers</h2>
+        <a class="inline-link" href="/videos/">Bekijk alle video’s {ui_icon("arrow-up-right")}</a>
+    </div>
+    <div class="video-preview-grid" role="group" aria-label="Haarfillervideo’s" tabindex="0">{"".join(cards)}</div>
+    <dialog class="video-dialog" aria-labelledby="video-dialog-title">
+        <div class="video-dialog-header">
+            <h3 id="video-dialog-title"></h3>
+            <button type="button" class="video-dialog-close" aria-label="Sluit video" autofocus>{ui_icon("x")}</button>
+        </div>
+        <div class="video-dialog-player"></div>
+        <a class="inline-link video-dialog-source" target="_blank" rel="noopener">Open originele video {ui_icon("arrow-up-right")}</a>
+    </dialog>
+</section>'''
+
+
 def page_html(page):
     if page.get("redirect"):
         dest = escape(page["redirect"])
@@ -381,12 +416,13 @@ def page_html(page):
     for i,h in enumerate(body.find_all("h2"),1): h["id"] = f"section-{i}"
     article_lead = f'<div class="article-lead"><p class="section-kicker">VOLLEDIGE INFORMATIE</p><h2>{title}</h2><p>Lees hieronder alle informatie van de bestaande website over dit onderwerp.</p></div>' if path in PRIORITY and not is_home else ''
     article = home_essentials() + home_reviews() if is_home else f'''<section class="article-shell">{breadcrumb}{article_lead}<div class="article-grid"><aside class="article-aside"><p>Op deze pagina</p><nav aria-label="Op deze pagina">{contents}</nav><a href="{BOOK}">Maak een afspraak {ui_icon("arrow-up-right")}</a></aside><article class="source-content">{body}</article></div></section>'''
+    gallery = home_video_gallery() if is_home else ""
     nearby = next_steps()
     closing_photo = source_asset("https://www.haarfillers.com/wp-content/uploads/2022/11/SarasinClinic_interieur_Gent_06.jpg") if path in PRIORITY else "/assets/treatment-process.png"
     closing_alt = "Interieur Sarasin Clinic Gent" if path in PRIORITY else "Illustratieve behandeling in een clinic"
     closing = f'''<section class="closing"><div><p class="section-kicker">SARASIN CLINIC</p><h2>Goed advies begint met goed kijken.</h2><p>Vertel ons wat je merkt aan je haar. Tijdens een gratis consultatie bekijken we samen wat voor jou passend is.</p><a class="button-primary" href="{BOOK}">Boek gratis consultatie {ui_icon("arrow-up-right")}</a></div><img src="{escape(closing_photo)}" alt="{closing_alt}" loading="lazy"></section>'''
     strip = "" if path in PRIORITY else visual_strip(page)
-    return head + nav() + hero + quick + process + feature_module(page) + strip + article + nearby + closing + footer() + '</body></html>'
+    return head + nav() + hero + quick + process + feature_module(page) + strip + article + gallery + nearby + closing + footer() + '</body></html>'
 
 
 def main():

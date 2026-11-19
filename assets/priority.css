@@ -85,3 +85,94 @@
   .route-home .home-hero { grid-template-columns: 1fr; gap: 26px; }
   .home-hero .hero-inner { padding: 24px 0 0; }
 }
+
+.home-videos {
+  padding: clamp(56px, 6vw, 96px) var(--site-gutter);
+  background: var(--paper);
+}
+
+.home-videos-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin-bottom: 28px;
+}
+
+.home-videos-heading h2 {
+  margin: 0;
+  font: 500 clamp(32px, 4vw, 58px)/1.08 Manrope, sans-serif;
+  letter-spacing: -.04em;
+  color: var(--forest);
+}
+
+.home-videos-heading .inline-link { margin-top: 0; }
+.video-preview-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.video-preview { min-width: 0; text-decoration: none; color: var(--forest); }
+
+.video-preview-media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 5;
+  max-height: min(340px, 65vh);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--forest-deep);
+}
+
+.video-preview img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.video-preview-play {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--forest-deep);
+  color: var(--white);
+  font-size: 22px;
+}
+
+.video-preview:hover .video-preview-play,
+.video-preview:focus-visible .video-preview-play { background: var(--white); color: var(--forest); }
+
+.video-preview strong {
+  display: block;
+  margin-top: 12px;
+  font: 700 15px/1.35 Manrope, sans-serif;
+}
+
+.video-dialog {
+  width: min(680px, calc(100% - 32px));
+  max-height: calc(100dvh - 24px);
+  border: 0;
+  border-radius: 16px;
+  padding: clamp(14px, 3vw, 24px);
+  background: var(--paper);
+  color: var(--forest);
+}
+
+.video-dialog::backdrop { background: rgb(16 39 31 / 82%); }
+.video-dialog-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.video-dialog-header h3 { margin: 0; font: 700 clamp(17px, 3vw, 24px)/1.25 Manrope, sans-serif; }
+.video-dialog-close { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border: 0; border-radius: 50%; color: var(--forest); background: var(--sage); font-size: 22px; cursor: pointer; }
+.video-dialog-player { display: grid; place-items: center; border-radius: 8px; overflow: hidden; background: var(--forest-deep); }
+.video-dialog video { display: block; width: auto; max-width: 100%; height: min(62vh, 540px); object-fit: contain; }
+.video-dialog iframe { width: 100%; aspect-ratio: 16 / 9; max-height: 62vh; border: 0; }
+.video-dialog-source { margin-top: 14px; font-size: 14px; }
+
+@media (max-width: 900px) {
+  .video-preview-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: clamp(138px, 46%, 205px);
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding: 5px 5px 12px;
+    margin: -5px;
+  }
+
+  .video-preview { scroll-snap-align: start; }
+}
