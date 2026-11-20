@@ -1,6 +1,42 @@
-const toggle=document.querySelector('.menu-toggle');
-const mobile=document.querySelector('.mobile-nav');
-if(toggle&&mobile){toggle.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')==='true';toggle.setAttribute('aria-expanded',String(!open));toggle.setAttribute('aria-label',open?'Open menu':'Sluit menu');mobile.hidden=open;});mobile.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mobile.hidden=true;toggle.setAttribute('aria-expanded','false')}));}
+const menuToggle = document.querySelector('.menu-toggle');
+const mobileMenu = document.querySelector('#mobile-menu');
+
+if (menuToggle && mobileMenu) {
+  const mobileViewport = window.matchMedia('(max-width: 800px)');
+  const setOpen = (open, restoreFocus = false) => {
+    mobileMenu.hidden = !open;
+    menuToggle.setAttribute('aria-expanded', String(open));
+    menuToggle.setAttribute('aria-label', open ? 'Sluit menu' : 'Open menu');
+    if (restoreFocus) menuToggle.focus();
+  };
+
+  const isInside = (target) => mobileMenu.contains(target) || menuToggle.contains(target);
+  const current = [...mobileMenu.querySelectorAll('.mobile-nav-link')].find((link) => {
+    return location.pathname === link.pathname || location.pathname.startsWith(link.pathname);
+  });
+  if (current) current.setAttribute('aria-current', current.pathname === location.pathname ? 'page' : 'location');
+
+  menuToggle.addEventListener('click', () => setOpen(mobileMenu.hidden));
+  mobileMenu.addEventListener('click', (event) => {
+    if (event.target.closest('a')) setOpen(false);
+  });
+  document.addEventListener('click', (event) => {
+    if (!mobileMenu.hidden && !isInside(event.target)) setOpen(false);
+  });
+  document.addEventListener('focusin', (event) => {
+    if (!mobileMenu.hidden && !isInside(event.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !mobileMenu.hidden) {
+      event.preventDefault();
+      setOpen(false, true);
+    }
+  });
+  mobileViewport.addEventListener('change', (event) => {
+    if (!event.matches) setOpen(false);
+  });
+}
+
 const headings=[...document.querySelectorAll('.source-content h2[id]')];
 if(headings.length&&'IntersectionObserver' in window){const links=[...document.querySelectorAll('.article-aside nav a')];const io=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){links.forEach(a=>a.style.color=a.hash==='#'+entry.target.id?'#18352d':'');}})},{rootMargin:'-20% 0px -70% 0px'});headings.forEach(h=>io.observe(h));}
 

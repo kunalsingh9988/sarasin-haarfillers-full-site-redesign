@@ -238,11 +238,30 @@ def next_steps():
     return f'''<section class="next-steps"><p class="section-kicker">VERDER LEZEN</p><h2>Een volgende stap, op jouw tempo.</h2><div>{links}</div></section>'''
 
 
+def mobile_nav():
+    destinations = [
+        ("/mannen/", "Voor mannen", "mars"),
+        ("/vrouwen/", "Voor vrouwen", "venus"),
+        ("/voor-en-na/", "Resultaten", "images"),
+        ("/prijzen/", "Prijzen", "euro"),
+        ("/sarasin-clinic/", "De clinic", "map-pin"),
+        ("/faq/", "Veelgestelde vragen", "circle-help"),
+    ]
+    links = "".join(
+        f'<li><a class="mobile-nav-link" href="{url}">{ui_icon(icon)}<span>{label}</span></a></li>'
+        for url, label, icon in destinations
+    )
+    return f'''<nav class="mobile-nav" id="mobile-menu" aria-label="Mobiele navigatie" hidden>
+        <ul class="mobile-nav-grid" role="list">{links}</ul>
+        <a class="button-primary mobile-nav-book" href="{BOOK}">Boek consultatie {ui_icon("arrow-up-right")}</a>
+    </nav>'''
+
+
 def nav():
     return f'''<header class="site-header"><a class="brand" href="/" aria-label="Haarfillers home"><span class="brand-mark">S</span><span>SARASIN<span class="brand-small">HAARFILLERS</span></span></a>
     <nav class="desktop-nav" aria-label="Hoofdnavigatie"><a href="/mannen/">Voor mannen</a><a href="/vrouwen/">Voor vrouwen</a><a href="/voor-en-na/">Resultaten</a><a href="/prijzen/">Prijzen</a><a href="/sarasin-clinic/">De clinic</a></nav>
-    <a class="header-cta" href="{BOOK}">Boek consultatie {ui_icon("arrow-up-right")}</a><button class="menu-toggle" aria-label="Open menu" aria-expanded="false">{ui_icon("menu", "menu-open")}{ui_icon("x", "menu-close")}</button></header>
-    <nav class="mobile-nav" aria-label="Mobiele navigatie" hidden><a href="/mannen/">Voor mannen</a><a href="/vrouwen/">Voor vrouwen</a><a href="/voor-en-na/">Resultaten</a><a href="/prijzen/">Prijzen</a><a href="/sarasin-clinic/">De clinic</a><a href="/faq/">Veelgestelde vragen</a><a href="{BOOK}">Boek consultatie {ui_icon("arrow-up-right")}</a></nav>'''
+    <a class="header-cta" href="{BOOK}">Boek consultatie {ui_icon("arrow-up-right")}</a><button type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">{ui_icon("menu", "menu-open")}{ui_icon("x", "menu-close")}</button></header>
+    {mobile_nav()}'''
 
 
 def footer():
