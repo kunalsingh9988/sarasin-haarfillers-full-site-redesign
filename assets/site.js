@@ -91,45 +91,47 @@ const heroResults = document.querySelector('.home-transformation');
 if (heroResults) {
   const photos = [...heroResults.querySelectorAll('.transformation-images img')];
   const controls = heroResults.querySelector('.transformation-controls');
-  const pause = heroResults.querySelector('.transformation-toggle');
+  const pause = heroResults.querySelector('.transformation-pause');
+  const previous = heroResults.querySelector('.transformation-prev');
   const next = heroResults.querySelector('.transformation-next');
-  const count = heroResults.querySelector('.transformation-count');
+  const dots = [...heroResults.querySelectorAll('.transformation-dot')];
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let active = 0;
-  let playing = !motion.matches;
+  let stopped = false;
   let inView = !('IntersectionObserver' in window);
   let timer;
 
-  const advance = () => {
-    const target = (active + 1) % photos.length;
+  const advance = (direction = 1) => {
+    const target = (active + direction + photos.length) % photos.length;
     if (!photos[target].complete || !photos[target].naturalWidth) return;
     photos[active].hidden = true;
     photos[target].hidden = false;
+    dots[active].classList.remove('is-current');
+    dots[target].classList.add('is-current');
     active = target;
-    count.textContent = `${active + 1} / ${photos.length}`;
   };
 
   const sync = () => {
-    pause.textContent = playing ? 'Pauze' : 'Afspelen';
+    const autoplay = !stopped && !motion.matches;
+    pause.hidden = !autoplay;
     clearInterval(timer);
-    if (playing && inView && !document.hidden) timer = setInterval(advance, 3000);
+    if (autoplay && inView && !document.hidden) timer = setInterval(advance, 3000);
+  };
+
+  const select = (direction) => {
+    stopped = true;
+    advance(direction);
+    sync();
   };
 
   pause.addEventListener('click', () => {
-    playing = !playing;
+    stopped = true;
+    next.focus();
     sync();
   });
-
-  next.addEventListener('click', () => {
-    playing = false;
-    advance();
-    sync();
-  });
-
-  motion.addEventListener('change', () => {
-    playing = !motion.matches;
-    sync();
-  });
+  previous.addEventListener('click', () => select(-1));
+  next.addEventListener('click', () => select(1));
+  motion.addEventListener('change', sync);
 
   document.addEventListener('visibilitychange', sync);
   if ('IntersectionObserver' in window) {

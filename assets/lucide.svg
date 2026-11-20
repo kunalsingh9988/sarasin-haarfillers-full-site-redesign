@@ -77,4 +77,7 @@
   <path d="M9 9.5a3 2.5 0 016 0c0 2-2 2-3 3.5" />
   <path d="M12 17h.01" />
 </symbol>
+  <symbol id="pause" viewBox="0 0 24 24"><rect x="14" y="3" width="5" height="18" rx="1" />
+  <rect x="5" y="3" width="5" height="18" rx="1" />
+</symbol>
 </svg>

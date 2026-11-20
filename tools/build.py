@@ -515,17 +515,21 @@ def home_hero_results():
     for index, (asset, alt) in enumerate(cases):
         attrs = 'fetchpriority="high"' if index == 0 else 'fetchpriority="low" decoding="async" hidden'
         photos.append(f'<img src="/assets/hero-result-{asset}.webp" alt="{alt}" {attrs}>')
+    dots = '<span class="transformation-dot is-current"></span>' + '<span class="transformation-dot"></span>' * (len(cases) - 1)
     return f'''<figure class="home-transformation">
         <div class="transformation-photo">
             <div class="transformation-labels" aria-hidden="true" lang="en" translate="no"><span>Before</span><span>After</span></div>
             <div class="transformation-images">{"".join(photos)}</div>
         </div>
         <div class="transformation-controls" hidden>
-            <button type="button" class="transformation-toggle">Pauze</button>
-            <span class="transformation-count" aria-live="off">1 / {len(cases)}</span>
-            <button type="button" class="transformation-next" aria-label="Volgend resultaat">{ui_icon("arrow-right")}</button>
+            <button type="button" class="transformation-prev" aria-label="Vorig resultaat">{ui_icon("arrow-right")}</button>
+            <span class="transformation-dots" aria-hidden="true">{dots}</span>
+            <div class="transformation-actions">
+                <button type="button" class="transformation-pause" aria-label="Stop automatisch wisselen">{ui_icon("pause")}</button>
+                <button type="button" class="transformation-next" aria-label="Volgend resultaat">{ui_icon("arrow-right")}</button>
+            </div>
         </div>
-        <figcaption>Voor en na bij Sarasin Clinic. Resultaten verschillen per persoon.</figcaption>
+        <figcaption>Resultaten verschillen per persoon.</figcaption>
     </figure>'''
 
 
