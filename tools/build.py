@@ -346,7 +346,7 @@ def home_results():
     ]
     photos = "".join(
         f'''<figure class="home-result-card">
-            <div class="home-result-labels" aria-hidden="true"><span>Voor</span><span>Na</span></div>
+            <div class="home-result-labels" aria-hidden="true" lang="en" translate="no"><span>Before</span><span>After</span></div>
             <img src="{photo}" alt="{alt}" width="800" height="{height}" loading="lazy" decoding="async">
         </figure>'''
         for photo, alt, height in cases
@@ -470,6 +470,30 @@ def home_video_gallery():
 </section>'''
 
 
+def home_hero_results():
+    cases = [
+        ("59c9b97482", "Haarscheiding met donker haar voor en na een haarfillerbehandeling"),
+        ("8905a3cd60", "De kruin van een man voor en na een haarfillerbehandeling"),
+        ("fe5b164a47", "Haarscheiding met blond haar voor en na een haarfillerbehandeling"),
+    ]
+    photos = []
+    for index, (asset, alt) in enumerate(cases):
+        attrs = 'fetchpriority="high"' if index == 0 else 'fetchpriority="low" decoding="async" hidden'
+        photos.append(f'<img src="/assets/hero-result-{asset}.webp" alt="{alt}" {attrs}>')
+    return f'''<figure class="home-transformation">
+        <div class="transformation-photo">
+            <div class="transformation-labels" aria-hidden="true" lang="en" translate="no"><span>Before</span><span>After</span></div>
+            <div class="transformation-images">{"".join(photos)}</div>
+        </div>
+        <div class="transformation-controls" hidden>
+            <button type="button" class="transformation-toggle">Pauze</button>
+            <span class="transformation-count" aria-live="off">1 / {len(cases)}</span>
+            <button type="button" class="transformation-next" aria-label="Volgend resultaat">{ui_icon("arrow-right")}</button>
+        </div>
+        <figcaption>Voor en na bij Sarasin Clinic. Resultaten verschillen per persoon.</figcaption>
+    </figure>'''
+
+
 def page_html(page):
     if page.get("redirect"):
         dest = escape(page["redirect"])
@@ -487,17 +511,7 @@ def page_html(page):
     head = f'''<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#18352d"><meta name="robots" content="noindex,follow"><title>{title} | Sarasin Clinic</title><meta name="description" content="{escape(page['description'] or page['intro'][:150])}"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">{priority_css}<script defer src="/assets/site.js"></script></head><body class="page-{category(path)} {route_class}">'''
     hero_copy = f'''<div class="hero-inner"><p class="hero-kicker">{label}</p><h1>{display_title}</h1><p class="hero-intro">{desc}</p><div class="hero-actions"><a class="button-primary" href="{BOOK}">Boek gratis consultatie {ui_icon("arrow-up-right")}</a><a class="button-text" href="/voor-en-na/">Bekijk resultaten {ui_icon("arrow-up-right")}</a></div></div>'''
     if is_home:
-        result = source_asset("https://www.haarfillers.com/wp-content/uploads/2022/12/2022-12-23_SarasinClinic_Haarfiller-vrouw_03.jpg")
-        hero = f'''<section class="hero home-hero">
-    {hero_copy}
-    <figure class="home-transformation">
-        <div class="transformation-photo">
-            <img src="{escape(result)}" width="800" height="693" alt="Bovenaanzicht van dezelfde hoofdhuid voor en na een haarfillerbehandeling bij Sarasin Clinic" fetchpriority="high">
-            <div class="transformation-labels" aria-hidden="true"><span>Voor</span><span>Na</span></div>
-        </div>
-        <figcaption>Voor en na bij Sarasin Clinic. Resultaten verschillen per persoon.</figcaption>
-    </figure>
-</section>'''
+        hero = f'<section class="hero home-hero">{hero_copy}{home_hero_results()}</section>'
     else:
         hero = f'''<section class="hero"><div class="hero-photo"><img src="{escape(photo)}" alt="{display_title}" fetchpriority="high"></div><div class="hero-shade"></div>{hero_copy}<div class="hero-caption">{caption}</div></section>'''
     if is_home:

@@ -49,3 +49,61 @@ if (videoDialog?.showModal) {
     opener?.focus();
   });
 }
+
+const heroResults = document.querySelector('.home-transformation');
+
+if (heroResults) {
+  const photos = [...heroResults.querySelectorAll('.transformation-images img')];
+  const controls = heroResults.querySelector('.transformation-controls');
+  const pause = heroResults.querySelector('.transformation-toggle');
+  const next = heroResults.querySelector('.transformation-next');
+  const count = heroResults.querySelector('.transformation-count');
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let active = 0;
+  let playing = !motion.matches;
+  let inView = !('IntersectionObserver' in window);
+  let timer;
+
+  const advance = () => {
+    const target = (active + 1) % photos.length;
+    if (!photos[target].complete || !photos[target].naturalWidth) return;
+    photos[active].hidden = true;
+    photos[target].hidden = false;
+    active = target;
+    count.textContent = `${active + 1} / ${photos.length}`;
+  };
+
+  const sync = () => {
+    pause.textContent = playing ? 'Pauze' : 'Afspelen';
+    clearInterval(timer);
+    if (playing && inView && !document.hidden) timer = setInterval(advance, 3000);
+  };
+
+  pause.addEventListener('click', () => {
+    playing = !playing;
+    sync();
+  });
+
+  next.addEventListener('click', () => {
+    playing = false;
+    advance();
+    sync();
+  });
+
+  motion.addEventListener('change', () => {
+    playing = !motion.matches;
+    sync();
+  });
+
+  document.addEventListener('visibilitychange', sync);
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      sync();
+    });
+    observer.observe(heroResults);
+  }
+
+  controls.hidden = false;
+  sync();
+}
