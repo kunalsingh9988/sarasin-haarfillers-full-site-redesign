@@ -218,6 +218,8 @@ def next_steps():
         ("ff33a39ffc", "Dr. Van Gasse"),
         ("d8fd035c5a", "Dr. Zin Mar Aung"),
         ("b4bacde2c8", "Nurse Hayat"),
+        ("a794178995", "Dr. Debeuf"),
+        ("e8913570f3", "Dr. Monné"),
     ]
     team_images = "".join(
         f'<img src="/assets/next-team-{asset}.webp" alt="{name}" width="256" height="256" loading="lazy" decoding="async">'

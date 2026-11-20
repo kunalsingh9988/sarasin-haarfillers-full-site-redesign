@@ -102,7 +102,7 @@
 
 .next-card-team .next-card-media {
   display: grid;
-  grid-template: repeat(2, minmax(0, 1fr)) / repeat(2, minmax(0, 1fr));
+  grid-template: repeat(2, minmax(0, 1fr)) / repeat(3, minmax(0, 1fr));
   place-items: center;
   gap: 8px;
   padding: 12px;
@@ -229,6 +229,7 @@ details[open] .disclosure-minus { display: inline-block; }
   .next-steps > div { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .next-card { display: grid; grid-template-columns: clamp(76px, 24vw, 150px) minmax(0, 1fr); }
   .next-card-media { aspect-ratio: auto; min-height: 96px; }
+  .next-card-team { grid-template-columns: clamp(106px, 29vw, 150px) minmax(0, 1fr); }
   .next-card-team .next-card-media { gap: 4px; padding: 5px; }
   .next-card-label strong { font-size: clamp(16px, 3.4vw, 22px); }
   .next-card-label .ui-icon { font-size: 18px; }
