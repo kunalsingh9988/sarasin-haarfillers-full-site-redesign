@@ -310,6 +310,35 @@ def feature_module(page):
     return ""
 
 
+def home_treatment():
+    steps = [
+        ("clipboard-list", "Consultatie", "We bekijken je hoofdhuid en bespreken je haarverlies en verwachtingen."),
+        ("syringe", "Behandeling", "Als haarfillers bij je passen, behandelt de specialist de afgesproken zones."),
+        ("list-checks", "Opvolging", "We bespreken hoe het gaat en of een vervolgsessie zinvol is."),
+    ]
+    rows = "".join(
+        f'''<li>
+            <span class="process-step-icon">{ui_icon(icon)}</span>
+            <div><h3>{title}</h3><p>{description}</p></div>
+        </li>'''
+        for icon, title, description in steps
+    )
+    return f'''<section class="process-feature" aria-labelledby="home-treatment-title">
+        <div class="process-image">
+            <video controls playsinline preload="none" poster="/assets/hairfiller-treatment-poster.jpg" aria-label="Sarasin Clinic behandelvideo">
+                <source src="/assets/hairfiller-treatment.mp4" type="video/mp4">
+                Je browser ondersteunt deze video niet.
+            </video>
+        </div>
+        <div class="process-copy">
+            <h2 id="home-treatment-title">Zo verloopt je behandeling</h2>
+            <ol class="process-steps" role="list">{rows}</ol>
+            <p class="image-disclosure">Behandelbeelden van Sarasin Clinic.</p>
+            <a class="inline-link" href="/videos/">Bekijk alle video’s {ui_icon("arrow-up-right")}</a>
+        </div>
+    </section>'''
+
+
 def home_results():
     cases = [
         ("/assets/source/8905a3cd60.jpg", "De kruin van een man voor en na een haarfillerbehandeling", 653),
@@ -473,7 +502,7 @@ def page_html(page):
         hero = f'''<section class="hero"><div class="hero-photo"><img src="{escape(photo)}" alt="{display_title}" fetchpriority="high"></div><div class="hero-shade"></div>{hero_copy}<div class="hero-caption">{caption}</div></section>'''
     if is_home:
         quick = f'''<section class="quick-facts"><div>{ui_icon("clipboard-list", "fact-icon")}<strong>Persoonlijk behandelplan</strong><p>Start met een gratis consultatie.</p></div><div>{ui_icon("clock-3", "fact-icon")}<strong>30 minuten</strong><p>Gemiddelde behandeltijd.</p></div><div>{ui_icon("euro", "fact-icon")}<strong>Vanaf €210</strong><p>Per sessie, afhankelijk van de zone.</p></div></section>'''
-        process = f'''<section class="process-feature"><div class="process-image"><video controls preload="none" poster="/assets/hairfiller-treatment-poster.jpg" aria-label="Sarasin Clinic behandelvideo"><source src="/assets/hairfiller-treatment.mp4" type="video/mp4">Je browser ondersteunt deze video niet.</video></div><div class="process-copy"><p class="section-kicker">DE BEHANDELING</p><h2>Van analyse tot persoonlijk plan.</h2><p>Een consultatie brengt je haarconditie en verwachtingen in kaart. Daarna bespreekt de behandelaar of haarfillers voor jou geschikt zijn en hoe een behandeltraject kan verlopen.</p><p class="image-disclosure">Echte beelden uit een bestaande Sarasin Clinic behandelvideo.</p><a class="inline-link" href="/videos/">Bekijk alle video's {ui_icon("arrow-up-right")}</a></div></section>'''
+        process = home_treatment()
     else:
         quick = ""
         process = ""
