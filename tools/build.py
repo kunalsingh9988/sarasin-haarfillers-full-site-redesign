@@ -260,14 +260,14 @@ def mobile_nav():
 
 
 def nav():
-    return f'''<header class="site-header"><a class="brand" href="/" aria-label="Haarfillers home"><span class="brand-mark">S</span><span>SARASIN<span class="brand-small">HAARFILLERS</span></span></a>
+    return f'''<header class="site-header"><a class="brand" href="/" aria-label="Sarasin Clinic – startpagina"><img src="/assets/sarasin-clinic-logo.svg" alt="Sarasin Clinic" width="272" height="116"></a>
     <nav class="desktop-nav" aria-label="Hoofdnavigatie"><a href="/mannen/">Voor mannen</a><a href="/vrouwen/">Voor vrouwen</a><a href="/voor-en-na/">Resultaten</a><a href="/prijzen/">Prijzen</a><a href="/sarasin-clinic/">De clinic</a></nav>
     <a class="header-cta" href="{BOOK}">Boek consultatie {ui_icon("arrow-up-right")}</a><button type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">{ui_icon("menu", "menu-open")}{ui_icon("x", "menu-close")}</button></header>
     {mobile_nav()}'''
 
 
 def footer():
-    return '''<footer class="site-footer"><div class="footer-top"><div><p class="footer-name">SARASIN</p><p>Haarfillers met persoonlijk advies in Gent en Beveren.</p></div><div><h2>Ontdek</h2><a href="/mannen/">Voor mannen</a><a href="/vrouwen/">Voor vrouwen</a><a href="/voor-en-na/">Resultaten</a><a href="/prijzen/">Prijzen</a><a href="/faq/">FAQ</a></div><div><h2>Bezoek</h2><a href="/sarasin-clinic/gent/">Sint-Martens-Latem (Gent)</a><a href="/sarasin-clinic/beveren/">Beveren</a><a href="/sarasin-clinic/ons-team/">Ons team</a><a href="mailto:welcome@sarasinclinic.com">welcome@sarasinclinic.com</a></div></div><div class="footer-bottom"><span>© 2026 Sarasin Clinic · BE 0681.553.375</span><a href="/privacy-policy/">Privacy Policy</a><a href="/cookie-policy-eu/">Cookiebeleid</a><span>Beeldmateriaal: echte Sarasin-resultaten waar vermeld; behandelingsillustratie is gegenereerd.</span></div></footer>'''
+    return '''<footer class="site-footer"><div class="footer-top"><div><img class="footer-logo" src="/assets/sarasin-clinic-logo.svg" alt="Sarasin Clinic" width="272" height="116" loading="lazy" decoding="async"><p>Haarfillers met persoonlijk advies in Gent en Beveren.</p></div><div><h2>Ontdek</h2><a href="/mannen/">Voor mannen</a><a href="/vrouwen/">Voor vrouwen</a><a href="/voor-en-na/">Resultaten</a><a href="/prijzen/">Prijzen</a><a href="/faq/">FAQ</a></div><div><h2>Bezoek</h2><a href="/sarasin-clinic/gent/">Sint-Martens-Latem (Gent)</a><a href="/sarasin-clinic/beveren/">Beveren</a><a href="/sarasin-clinic/ons-team/">Ons team</a><a href="mailto:welcome@sarasinclinic.com">welcome@sarasinclinic.com</a></div></div><div class="footer-bottom"><span>© 2026 Sarasin Clinic · BE 0681.553.375</span><a href="/privacy-policy/">Privacy Policy</a><a href="/cookie-policy-eu/">Cookiebeleid</a><span>Beeldmateriaal: echte Sarasin-resultaten waar vermeld; behandelingsillustratie is gegenereerd.</span></div></footer>'''
 
 
 def visual_strip(page):
@@ -549,7 +549,7 @@ def page_html(page):
     caption = "Illustratieve consultatiescène · geen Sarasin-patiënt of medewerker" if path == "/faq/" else "Sarasin Clinic · Gent & Beveren"
     route_class = "route-" + (path.strip("/").replace("/", "-") or "home")
     priority_css = '<link rel="stylesheet" href="/assets/priority.css">' if path in PRIORITY else ''
-    head = f'''<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#18352d"><meta name="robots" content="noindex,follow"><title>{title} | Sarasin Clinic</title><meta name="description" content="{escape(page['description'] or page['intro'][:150])}"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">{priority_css}<script defer src="/assets/site.js"></script></head><body class="page-{category(path)} {route_class}">'''
+    head = f'''<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#18352d"><meta name="robots" content="noindex,follow"><title>{title} | Sarasin Clinic</title><meta name="description" content="{escape(page['description'] or page['intro'][:150])}"><link rel="icon" href="/assets/sarasin-clinic-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">{priority_css}<script defer src="/assets/site.js"></script></head><body class="page-{category(path)} {route_class}">'''
     hero_copy = f'''<div class="hero-inner"><p class="hero-kicker">{label}</p><h1>{display_title}</h1><p class="hero-intro">{desc}</p><div class="hero-actions"><a class="button-primary" href="{BOOK}">Boek gratis consultatie {ui_icon("arrow-up-right")}</a><a class="button-text" href="/voor-en-na/">Bekijk resultaten {ui_icon("arrow-up-right")}</a></div></div>'''
     if is_home:
         hero = f'<section class="hero home-hero">{hero_copy}{home_hero_results()}</section>'
