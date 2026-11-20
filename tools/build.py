@@ -362,21 +362,27 @@ def home_results():
 
 
 def home_prices():
+    photos = [
+        ("hairline", 480, 320),
+        ("crown", 608, 406),
+        ("scalp", 540, 360),
+    ]
     cards = "".join(
         f'''<li class="home-price-card">
-            <img src="{escape(source_asset(image))}" alt="" width="200" height="249" loading="lazy" decoding="async">
-            <div>
+            <img src="/assets/price-treatment-{photo}.webp" alt="" width="{width}" height="{height}" loading="lazy" decoding="async">
+            <div class="home-price-details">
                 <h3>{name}</h3>
                 <p>{size}</p>
                 <p class="home-price-amount"><strong>{price}</strong> <span>per sessie</span></p>
             </div>
         </li>'''
-        for name, size, price, image in TREATMENT_ZONES
+        for (name, size, price, _), (photo, width, height) in zip(TREATMENT_ZONES, photos, strict=True)
     )
     return f'''<section class="home-prices" id="haarfiller-prijzen" aria-labelledby="home-prices-title">
         <div class="home-preview-heading">
             <h2 id="home-prices-title">Prijzen per zone</h2>
             <p>Tijdens je consultatie bespreken we de behandelzone en hoeveel sessies bij jouw situatie passen.</p>
+            <p class="home-price-photo-note">Foto’s uit Sarasin Clinic behandelvideo’s.</p>
             <a class="inline-link" href="/prijzen/">Bekijk alle prijsinformatie {ui_icon("arrow-right")}</a>
         </div>
         <ul class="home-price-grid">{cards}</ul>
