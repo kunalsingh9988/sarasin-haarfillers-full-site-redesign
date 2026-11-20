@@ -213,17 +213,27 @@ def ui_icon(name, extra_class=""):
 
 
 def next_steps():
+    portraits = [
+        ("cf5f1d632b", "Karen Sarasin"),
+        ("ff33a39ffc", "Dr. Van Gasse"),
+        ("d8fd035c5a", "Dr. Zin Mar Aung"),
+        ("b4bacde2c8", "Nurse Hayat"),
+    ]
+    team_images = "".join(
+        f'<img src="/assets/next-team-{asset}.webp" alt="{name}" width="256" height="256" loading="lazy" decoding="async">'
+        for asset, name in portraits
+    )
     cards = [
-        ("results", "/voor-en-na/", "/assets/source/8905a3cd60.jpg", "Bekijk echte resultaten"),
-        ("price", "/prijzen/", "/assets/source/849b45965c.png", "Ontdek de prijzen"),
-        ("team", "/sarasin-clinic/ons-team/", "/assets/source/cf5f1d632b.png", "Maak kennis met het team"),
+        ("results", "/voor-en-na/", '<img src="/assets/next-steps-result.webp" alt="" width="800" height="607" loading="lazy" decoding="async">', "Bekijk echte resultaten"),
+        ("price", "/prijzen/", '<img src="/assets/price-treatment-crown.webp" alt="" width="608" height="406" loading="lazy" decoding="async">', "Ontdek de prijzen"),
+        ("team", "/sarasin-clinic/ons-team/", team_images, "Maak kennis met het team"),
     ]
     links = "".join(
         f'''<a class="next-card next-card-{kind}" href="{url}">
-            <div class="next-card-media"><img src="{image}" alt="" loading="lazy" decoding="async"></div>
+            <div class="next-card-media" aria-hidden="true">{media}</div>
             <span class="next-card-label"><strong>{title}</strong>{ui_icon("arrow-right")}</span>
         </a>'''
-        for kind, url, image, title in cards
+        for kind, url, media, title in cards
     )
     return f'''<section class="next-steps"><p class="section-kicker">VERDER LEZEN</p><h2>Een volgende stap, op jouw tempo.</h2><div>{links}</div></section>'''
 
