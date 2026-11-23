@@ -5,23 +5,18 @@
 }
 
 .clinic-wordmark {
-  display: inline-grid;
-  justify-items: center;
-  gap: 5px;
+  display: block;
   width: clamp(116px, 11vw, 152px);
-  color: #646461;
+  height: auto;
 }
 
-.clinic-wordmark img { display: block; width: 100%; height: auto; }
-.clinic-wordmark > span {
-  padding-left: .32em;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: .32em;
-  line-height: 1;
+.site-footer .clinic-wordmark {
+  box-sizing: content-box;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border-radius: var(--radius-detail);
+  background: var(--paper);
 }
-
-.site-footer .clinic-wordmark { filter: brightness(0) invert(1); margin-bottom: 16px; }
 
 body .header-cta,
 body .button-primary,

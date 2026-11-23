@@ -283,7 +283,7 @@ def footer():
 
 
 def brand_markup():
-    return '<span class="clinic-wordmark" role="img" aria-label="Sarasin Clinic"><img src="/assets/shop-wordmark.svg" alt="" width="1686" height="424"><span aria-hidden="true">CLINIC</span></span>'
+    return '<img class="clinic-wordmark" src="/assets/sarasin-clinic-logo.svg" alt="Sarasin Clinic" width="1024" height="410">'
 
 
 def patient_concerns():

@@ -18,7 +18,7 @@ The generator imports the existing Haarfillers routes and the Dutch clinic resou
 
 ## Brand and imagery
 
-- The site uses the exact Sarasin wordmark vector from the public [webshop](https://www.sarasin.shop/) with a separate Clinic line.
+- The shared logo embeds the supplied Sarasin wordmark artwork at its original colour, with a separate Clinic line.
 - The waiting area, reception and treatment-room photos come from the official [Beveren location page](https://sarasinclinic.com/the-clinic/beveren/). The Beveren page links to Sarasin Clinic’s [Beveren sneak peek](https://www.youtube.com/watch?v=mkb5j9Rtv8U).
 - The four doctors listed for Hairfiller and their RIZIV numbers are sourced from the [Sarasin Clinic team](https://sarasinclinic.com/over-ons/team/). The doctor cards link to the most specific official profile available.
 - Existing patient results come from the clinic’s public photo gallery. Illustrative consultation images are identified where used.
