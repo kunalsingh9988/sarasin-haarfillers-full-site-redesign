@@ -14,6 +14,8 @@ from xml.etree import ElementTree as ET
 import requests
 from bs4 import BeautifulSoup, Comment
 
+from blog_content import POSTS, TREATMENT
+
 from clinic_content import (ANSWERS, BEVEREN, BOOK_LABEL, CLINIC, CONCERNS, DOCTORS,
                             SOURCE_GROUPS, answer_card, clinic_route)
 
@@ -260,6 +262,7 @@ def mobile_nav():
         ("/prijzen/", "Prijzen", "euro"),
         ("/sarasin-clinic/", "De clinic", "map-pin"),
         ("/faq/", "Veelgestelde vragen", "circle-help"),
+        ("/blog/", "Blog", "clipboard-list"),
     ]
     links = "".join(
         f'<li><a class="mobile-nav-link" href="{url}">{ui_icon(icon)}<span>{label}</span></a></li>'
@@ -273,13 +276,13 @@ def mobile_nav():
 
 def nav():
     return f'''<header class="site-header"><a class="brand" href="/" aria-label="Sarasin Clinic – startpagina">{brand_markup()}</a>
-    <nav class="desktop-nav" aria-label="Hoofdnavigatie"><a href="/mannen/">Voor mannen</a><a href="/vrouwen/">Voor vrouwen</a><a href="/voor-en-na/">Resultaten</a><a href="/prijzen/">Prijzen</a><a href="/sarasin-clinic/">De clinic</a><a href="/faq/">Haarvragen</a></nav>
+    <nav class="desktop-nav" aria-label="Hoofdnavigatie"><a href="/mannen/">Voor mannen</a><a href="/vrouwen/">Voor vrouwen</a><a href="/voor-en-na/">Resultaten</a><a href="/prijzen/">Prijzen</a><a href="/sarasin-clinic/">De clinic</a><a href="/faq/">Haarvragen</a><a href="/blog/">Blog</a></nav>
     <a class="header-cta" href="{BOOK}">{BOOK_LABEL} {ui_icon("arrow-up-right")}</a><button type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">{ui_icon("menu", "menu-open")}{ui_icon("x", "menu-close")}</button></header>
     {mobile_nav()}'''
 
 
 def footer():
-    return f'''<footer class="site-footer"><div class="footer-top"><div>{brand_markup()}<p>Haarfillers met persoonlijk advies in Gent en Beveren.</p></div><div><h2>Ontdek</h2><a href="/mannen/">Voor mannen</a><a href="/vrouwen/">Voor vrouwen</a><a href="/voor-en-na/">Resultaten</a><a href="/prijzen/">Prijzen</a><a href="/faq/">FAQ</a></div><div><h2>Bezoek</h2><a href="/sarasin-clinic/gent/">Sint-Martens-Latem (Gent)</a><a href="/sarasin-clinic/beveren/">Beveren</a><a href="/sarasin-clinic/ons-team/">Ons team</a><a href="mailto:welcome@sarasinclinic.com">welcome@sarasinclinic.com</a></div></div><div class="footer-bottom"><span>© 2026 Sarasin Clinic · BE 0681.553.375</span><a href="/privacy-policy/">Privacy Policy</a><a href="/cookie-policy-eu/">Cookiebeleid</a><span>Beeldmateriaal: echte Sarasin-resultaten waar vermeld; behandelingsillustratie is gegenereerd.</span></div></footer>'''
+    return f'''<footer class="site-footer"><div class="footer-top"><div>{brand_markup()}<p>Haarfillers met persoonlijk advies in Gent en Beveren.</p></div><div><h2>Ontdek</h2><a href="/mannen/">Voor mannen</a><a href="/vrouwen/">Voor vrouwen</a><a href="/voor-en-na/">Resultaten</a><a href="/prijzen/">Prijzen</a><a href="/faq/">FAQ</a><a href="/blog/">Blog</a></div><div><h2>Bezoek</h2><a href="/sarasin-clinic/gent/">Sint-Martens-Latem (Gent)</a><a href="/sarasin-clinic/beveren/">Beveren</a><a href="/sarasin-clinic/ons-team/">Ons team</a><a href="mailto:welcome@sarasinclinic.com">welcome@sarasinclinic.com</a></div></div><div class="footer-bottom"><span>© 2026 Sarasin Clinic · BE 0681.553.375</span><a href="/privacy-policy/">Privacy Policy</a><a href="/cookie-policy-eu/">Cookiebeleid</a><span>Beeldmateriaal: echte Sarasin-resultaten waar vermeld; behandelingsillustratie is gegenereerd.</span></div></footer>'''
 
 
 def brand_markup():
@@ -687,24 +690,104 @@ def home_hero_results():
     </figure>'''
 
 
+BLOG_DESCRIPTION = "Lees heldere antwoorden over haaruitval, een bredere haarscheiding, Hairfiller, PRP, prijzen en nazorg bij Sarasin Clinic."
+
+
+def blog_card(post, heading="h3"):
+    return f'''<a class="blog-card" href="{post.path}">
+        <img src="{escape(post.image)}" alt="{escape(post.alt)}" loading="lazy" decoding="async">
+        <div class="blog-card-copy"><small>{escape(post.category)}</small>
+        <{heading}>{escape(post.title)}</{heading}><p>{escape(post.description)}</p>
+        <span class="blog-card-action">Lees het artikel {ui_icon("arrow-right")}</span></div>
+    </a>'''
+
+
+def blog_preview():
+    selected = (POSTS[0], POSTS[3], POSTS[6])
+    cards = "".join(blog_card(post) for post in selected)
+    return f'''<section class="blog-section blog-preview" aria-labelledby="blog-preview-title">
+        <div class="blog-section-head"><h2 id="blog-preview-title">Verder lezen over haaruitval en Hairfiller</h2>
+        <a class="inline-link" href="/blog/">Bekijk alle artikels {ui_icon("arrow-right")}</a></div>
+        <div class="blog-grid">{cards}</div>
+    </section>'''
+
+
+def blog_page(page):
+    post = page.get("post")
+    if post is None:
+        featured = POSTS[0]
+        groups = (
+            ("Haaruitval", "haaruitval"),
+            ("Behandeling", "behandeling"),
+            ("Nazorg", "nazorg"),
+        )
+        group_links = "".join(f'<a href="#{id}">{label}</a>' for label, id in groups)
+        group_sections = "".join(
+            f'<section class="blog-topic" id="{id}"><h2>{label}</h2><div class="blog-grid">'
+            + "".join(blog_card(item) for item in POSTS[1:] if item.category == label)
+            + '</div></section>'
+            for label, id in groups
+        )
+        return f'''<div class="blog-section blog-index">
+            <div class="blog-index-intro"><h1>Blog over haaruitval en Hairfiller</h1>
+            <p>Van de eerste haren in je borstel tot vragen over een consult of nazorg. Kies het onderwerp dat jou bezighoudt.</p>
+            <nav class="blog-topics" aria-label="Blogonderwerpen">{group_links}</nav></div>
+            <div class="blog-feature">{blog_card(featured, "h2")}</div>
+            {group_sections}
+            <p class="blog-note">De beelden van haar en haarborstels zijn illustratief.</p>
+            <p><a class="inline-link" href="/faq/#kennisbank">Bekijk ook de kennisbank {ui_icon("arrow-right")}</a></p>
+        </div>'''
+
+    sections = "".join(f'<h2>{escape(title)}</h2><p>{escape(text)}</p>' for title, text in post.sections)
+    links = "".join(f'<li><a href="{escape(url)}">{escape(label)}</a></li>' for label, url in post.links)
+    sources = "".join(f'<li><a class="clinic-source" href="{escape(url)}">{escape(label)}</a></li>' for label, url in post.sources)
+    consultation = (f'<a class="button-primary" href="{BOOK}">{BOOK_LABEL} {ui_icon("arrow-up-right")}</a>'
+                    if post.category != "Haaruitval" else "")
+    return f'''<article class="blog-section blog-entry">
+        <nav class="blog-breadcrumb" aria-label="Broodkruimelpad"><a href="/">Home</a>
+        <a href="/blog/">Blog</a><span aria-current="page">{escape(post.category)}</span></nav>
+        <header class="blog-entry-intro"><h1>{escape(post.title)}</h1>
+        <p>{escape(post.answer)}</p></header>
+        <figure class="blog-cover"><img src="{escape(post.image)}" alt="{escape(post.alt)}" fetchpriority="high" decoding="async">
+        <figcaption>{escape(post.credit)}</figcaption></figure>
+        <div class="blog-entry-body">{sections}
+        <h2>Verder lezen</h2><ul>{links}</ul>{consultation}
+        <h2>Bronnen</h2><ul class="blog-sources">{sources}</ul></div>
+    </article>'''
+
+
+def blog_pages():
+    return [
+        {"path": "/blog/", "title": "Blog over haaruitval en Hairfiller", "description": BLOG_DESCRIPTION,
+         "source_url": TREATMENT, "source_text": BLOG_DESCRIPTION, "blog": True},
+        *({"path": post.path, "title": post.title, "description": post.description, "post": post,
+           "source_url": TREATMENT,
+           "source_text": " ".join((post.answer, *(text for _, text in post.sections))),
+           "blog": True} for post in POSTS),
+    ]
+
+
 def page_html(page, library):
     if page.get("redirect"):
         dest = escape(page["redirect"])
         return f'<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url={dest}"><meta name="robots" content="noindex"><title>Afspraak boeken | Sarasin Clinic</title></head><body><p>Je wordt doorgestuurd naar de boekingspagina. <a href="{dest}">Open de boekingspagina</a>.</p></body></html>'
     path = page["path"]
     is_home = path == "/"
-    photo = hero_image(page) if not is_home else None
     title = escape(page["title"])
     display_title = escape(SHORT_TITLES.get(path, page["title"]))
-    desc = escape(HERO_DECKS.get(path, page["description"] or page["intro"]))
+    desc = escape(HERO_DECKS.get(path, page["description"] or page.get("intro", "")))
     route_class = "route-" + (path.strip("/").replace("/", "-") or "home")
     priority_css = '<link rel="stylesheet" href="/assets/priority.css">' if path in PRIORITY else ''
     interior_css = '<link rel="stylesheet" href="/assets/interior.css">' if not is_home else ''
     canonical = escape(PUBLIC_SITE + path)
     seo_title = escape("Dunner wordend haar? Haarconsult en Hairfiller" if is_home else page.get("seo_title") or page["title"])
-    seo_description = escape("Merk je dat je haar dunner wordt of dat je meer haar verliest? Lees over mogelijke oorzaken en plan een haarconsult bij Sarasin Clinic in Gent of Beveren." if is_home else page.get("seo_description") or page["description"] or page["intro"][:155] or page["title"])
+    seo_description = escape("Merk je dat je haar dunner wordt of dat je meer haar verliest? Lees over mogelijke oorzaken en plan een haarconsult bij Sarasin Clinic in Gent of Beveren." if is_home else page.get("seo_description") or page["description"] or page.get("intro", "")[:155] or page["title"])
     robots = "noindex,follow" if path in TEXT_ONLY_ROUTES else "index,follow,max-image-preview:large"
-    head = f'''<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#18352d"><meta name="robots" content="{robots}"><title>{seo_title} | Sarasin Clinic</title><meta name="description" content="{seo_description}"><link rel="canonical" href="{canonical}"><link rel="icon" href="/assets/sarasin-clinic-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">{priority_css}{interior_css}<link rel="stylesheet" href="/assets/patient.css"><script defer src="/assets/site.js"></script></head><body class="page-{category(path)} {route_class}">'''
+    blog_css = '<link rel="stylesheet" href="/assets/blog.css">' if page.get("blog") or is_home else ''
+    head = f'''<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#18352d"><meta name="robots" content="{robots}"><title>{seo_title} | Sarasin Clinic</title><meta name="description" content="{seo_description}"><link rel="canonical" href="{canonical}"><link rel="icon" href="/assets/sarasin-clinic-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">{priority_css}{interior_css}<link rel="stylesheet" href="/assets/patient.css">{blog_css}<script defer src="/assets/site.js"></script></head><body class="page-{category(path)} {route_class}">'''
+    if page.get("blog"):
+        return head + nav() + '<main id="hoofdinhoud">' + blog_page(page) + '</main>' + footer() + '</body></html>'
+    photo = hero_image(page) if not is_home else None
     hero_copy = f'''<div class="hero-inner"><h1>{display_title}</h1><p class="hero-intro">{desc}</p><div class="hero-actions"><a class="button-primary" href="{BOOK}">{BOOK_LABEL} {ui_icon("arrow-up-right")}</a><a class="button-text" href="/voor-en-na/">Bekijk resultaten {ui_icon("arrow-up-right")}</a></div></div>'''
     if is_home:
         hero = f'<section class="hero home-hero">{hero_copy}{home_hero_results()}</section>'
@@ -769,6 +852,8 @@ def page_html(page, library):
     if path == "/faq/":
         article = question_hub() + clinic_library(library) + article
     previews = home_results() + home_prices() if is_home else ""
+    if is_home:
+        article += blog_preview()
     gallery = home_video_gallery() if is_home else ""
     nearby = next_steps()
     closing_photo = BEVEREN
@@ -866,6 +951,7 @@ def main():
         imported = dict(zip(sources, pool.map(import_clinic_page, sources)))
     library = {group: [imported[path] for path in paths] for group, paths in SOURCE_GROUPS.items()}
     results.extend(imported.values())
+    results.extend(blog_pages())
     seo_keys = {"title": {}, "description": {}}
     for page in results:
         if page.get("redirect"):

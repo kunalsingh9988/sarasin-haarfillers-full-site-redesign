@@ -9,19 +9,19 @@ BOOK_LABEL = "Plan een haarconsult"
 CONCERNS = (
     ("dunner-haar", "Mijn haar wordt dunner", "Waarom valt mijn haar uit?",
      "Dunner haar kan verschillende oorzaken hebben, zoals erfelijke aanleg, hormonale veranderingen of een periode van ziekte. Wanneer je haar anders aanvoelt of je hoofdhuid zichtbaarder wordt, kan een arts helpen de oorzaak te achterhalen.",
-     "/faq/veel-haarverlies/", "Lees over oorzaken van haarverlies"),
+     "/blog/waarom-valt-mijn-haar-uit/", "Lees over oorzaken van haarverlies"),
     ("plots-haarverlies", "Ik verlies plots meer haar", "Wanneer laat ik haaruitval onderzoeken?",
      "Bespreek haaruitval met je huisarts of dermatoloog als die plots begint, als je kale plekken krijgt of als je hoofdhuid jeukt, pijn doet of ontstoken aanvoelt. Ook bij aanhoudende haaruitval is het zinvol om de oorzaak te laten beoordelen.",
-     "/vrouwen/plotseling-haaruitval/", "Lees over plotselinge haaruitval"),
+     "/blog/wanneer-haaruitval-laten-onderzoeken/", "Lees over plotselinge haaruitval"),
     ("bredere-scheiding", "Mijn scheiding wordt breder", "Wat betekent het als mijn scheiding breder wordt?",
      "Een bredere scheiding kan betekenen dat het haar bovenop geleidelijk dunner wordt. Er zijn meerdere mogelijke oorzaken. Wanneer je de verandering voor het eerst opmerkte en of er ook meer haren uitvallen, helpt bij de beoordeling.",
-     "/vrouwen/oorzaken-haarverlies/", "Lees over dunner wordend haar"),
+     "/blog/mijn-haarscheiding-wordt-breder/", "Lees over dunner wordend haar"),
 )
 
 ANSWERS = (
     ("geschikt", "Is Hairfiller geschikt voor mij?",
      "Dat hangt af van de oorzaak en het patroon van je haarverlies, je medische voorgeschiedenis en je verwachtingen. Tijdens het consult bespreek je of Hairfiller een optie is en of verder onderzoek of een andere aanpak meer zin heeft.",
-     "/haarfiller-behandeling/", "Lees over de behandeling"),
+     "/blog/is-haarfiller-geschikt-voor-mij/", "Lees over de behandeling"),
     ("consult", "Wat gebeurt er tijdens een haarconsult?",
      "Je vertelt wat je merkt en sinds wanneer. De behandelaar bekijkt je hoofdhuid, bespreekt je voorgeschiedenis en legt uit welke vervolgstap bij je situatie past. Je kunt vragen stellen over alternatieven, risico’s en kosten.",
      "/#home-treatment-title", "Bekijk jouw haartraject"),
@@ -36,10 +36,10 @@ ANSWERS = (
      CLINIC + "/veelgestelde-vragen/wat-zijn-de-risico-en-complicaties-bij-een-hair-filler/", "Lees meer over risico’s"),
     ("nazorg", "Welke nazorg is nodig na Hairfiller?",
      "Volg de persoonlijke instructies van je behandelaar. Vraag vooraf wanneer je je haar weer mag wassen of kleuren en bij welke klachten je de clinic moet bellen.",
-     "/haarfiller-behandeling/", "Lees over voorbereiding en nazorg"),
+     "/blog/haarfiller-nazorg/", "Lees over voorbereiding en nazorg"),
     ("alternatieven", "Wat is het verschil tussen Hairfiller en PRP?",
      "Bij Hairfiller wordt een product in de hoofdhuid geïnjecteerd. Bij PRP wordt een concentraat uit je eigen bloed gebruikt. Welke aanpak besproken wordt, hangt af van de oorzaak van haarverlies en je situatie.",
-     "/faq/kennisbank/werkt-prp-tegen-haaruitval/", "Lees over PRP en haaruitval"),
+     "/blog/haarfiller-of-prp/", "Lees over PRP en haaruitval"),
 )
 
 DOCTORS = (
@@ -77,6 +77,7 @@ SOURCE_GROUPS = {
         "/fact-check-botox-haarfillers/",
     ),
     "Alternatieven en resultaten": (
+        "/behandelingen/haaruitval/prp/",
         "/behandelingen/hairfiller/haarimplantatie/",
         "/behandelingen/hairfiller/haartransplantatie-vrouwen-belgie/",
         "/behandelingen/hairfiller/haartransplantatie-gent/",
