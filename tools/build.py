@@ -287,16 +287,28 @@ def brand_markup():
 
 
 def patient_concerns():
-    options = "".join(
-        f'<a href="#{anchor}">{escape(label)} {ui_icon("arrow-right")}</a>'
-        for anchor, label, *_ in CONCERNS
-    )
-    responses = "".join(answer_card(anchor, question, text, url, label, ui_icon)
-                        for anchor, _, question, text, url, label in CONCERNS)
-    return f'''<section class="patient-section" aria-labelledby="patient-concerns">
+    image_descriptions = {
+        "dunner-haar": "Vrouw houdt haar fijne paardenstaart vast",
+        "plots-haarverlies": "Losse haren in een houten haarborstel",
+        "bredere-scheiding": "Bovenaanzicht van haar met een bredere middenscheiding",
+    }
+    cards = []
+    for anchor, concern, question, text, url, label in CONCERNS:
+        cards.append(f'''<article class="concern-card">
+            <a class="concern-trigger" href="#{anchor}">
+                <img src="/assets/concern-{anchor}.webp" alt="{escape(image_descriptions[anchor])}" width="864" height="486" loading="lazy" decoding="async">
+                <span>{escape(concern)} {ui_icon("arrow-right")}</span>
+            </a>
+            <div class="patient-answer concern-answer" id="{anchor}" tabindex="-1">
+                <h3>{escape(question)}</h3>
+                <p>{escape(text)}</p>
+                <a class="inline-link" href="{escape(url)}">{escape(label)} {ui_icon("arrow-right")}</a>
+            </div>
+        </article>''')
+    return f'''<section class="patient-section home-concerns" aria-labelledby="patient-concerns">
         <h2 id="patient-concerns">Wat merk jij aan je haar?</h2>
-        <nav class="patient-options" aria-label="Jouw haarvraag">{options}</nav>
-        <div class="patient-answers">{responses}</div>
+        <div class="concern-grid">{"".join(cards)}</div>
+        <p class="concern-disclosure">Illustratieve beelden.</p>
     </section>'''
 
 
