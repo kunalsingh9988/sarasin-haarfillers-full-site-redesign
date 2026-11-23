@@ -296,7 +296,7 @@ def patient_concerns():
     for anchor, concern, question, text, url, label in CONCERNS:
         cards.append(f'''<article class="concern-card">
             <a class="concern-trigger" href="#{anchor}">
-                <img src="/assets/concern-{anchor}.webp" alt="{escape(image_descriptions[anchor])}" width="864" height="486" loading="lazy" decoding="async">
+                <img src="/assets/concern-{anchor}.webp" alt="{escape(image_descriptions[anchor])}" width="864" height="487" loading="lazy" decoding="async">
                 <span>{escape(concern)} {ui_icon("arrow-right")}</span>
             </a>
             <div class="patient-answer concern-answer" id="{anchor}" tabindex="-1">
