@@ -2,7 +2,7 @@ const menuToggle = document.querySelector('.menu-toggle');
 const mobileMenu = document.querySelector('#mobile-menu');
 
 if (menuToggle && mobileMenu) {
-  const mobileViewport = window.matchMedia('(max-width: 800px)');
+  const mobileViewport = window.matchMedia('(max-width: 950px)');
   const setOpen = (open, restoreFocus = false) => {
     mobileMenu.hidden = !open;
     menuToggle.setAttribute('aria-expanded', String(open));

@@ -1,40 +1,28 @@
-# Sarasin Haarfillers — full-site redesign
+# Sarasin Haarfillers minisite
 
-This is a public, static review build of [Haarfillers.com](https://www.haarfillers.com/), generated on 19 November 2026. It covers 56 public WordPress page routes. The live website and its booking service are unchanged.
+Static Dutch site built from the public Haarfillers site and the main Sarasin Clinic Hairfiller material.
 
-## Design
+## Run locally
 
-The redesign uses a forest green, warm ivory, and muted gold visual system across every page. It adds image-led heroes, a consistent navigation and footer, visual summaries for key treatment pages, a prices comparison, a treatment journey, a real-results gallery, team and clinic visual sections, and easier in-page reading navigation. The original page copy is retained in the article area. Extra visual summaries are additive.
-
-The twelve primary routes (`/`, `/mannen/`, `/vrouwen/`, `/voor-en-na/`, `/prijzen/`, `/faq/`, `/sarasin-clinic/`, both locations, `/sarasin-clinic/ons-team/`, `/reviews/`, and `/videos/`) receive a second editorial pass with purpose-built hero copy and modules. The homepage now uses a short treatment guide and a separate review section in place of the imported full-content block, which repeated navigation, imagery, videos, and a lengthy review archive. The other priority routes retain their source information below the visual introductions.
-
-The user supplied [NeoYou's Dr. CYJ page](https://neoyou.netlify.app/en/dr-cyj-hair-fillers/) and [Dokter Frodo](https://www.dokterfrodo.nl/en) as inspiration. Their content, branding, and imagery were not copied. The direction uses clear treatment steps and pricing, real clinic photography, and practitioner-led trust cues.
-
-## Content and image provenance
-
-- `content-inventory.json` records the source URL and original rendered text for each generated route.
-- `assets/source/` holds 143 images downloaded from the existing public Haarfillers.com pages. This includes the site's existing result, staff, clinic, and zone images. No patient result was generated or retouched.
-- `assets/treatment-process.png` is an AI-generated illustrative treatment image. It is labeled as an illustration wherever featured prominently; it must not be presented as a real Sarasin patient or staff member.
-- `assets/consultation-illustration.png` is an AI-generated consultation scene used on the homepage and FAQ hero. Both heroes explicitly label it as illustrative.
-- `assets/hairfiller-treatment.mp4` and `assets/hairfiller-women.mp4` are unaltered treatment videos downloaded from the existing Haarfillers.com uploads. Their poster frames were extracted locally from those videos.
-- Existing medical and pricing wording is reproduced from the live pages, including any source inconsistencies. Clinical, legal, price, and consent review is needed before using this as the primary production site.
-
-## Run and rebuild
-
-The deployed site is plain HTML, CSS, and JavaScript. No framework or runtime dependency is required to serve it.
-
-```bash
+```sh
 python3 -m http.server 8787
 ```
 
-To regenerate from the live source, install `requests` and `beautifulsoup4`, then run:
+To rebuild with Python and the `requests` and `beautifulsoup4` packages installed:
 
-```bash
+```sh
 python3 tools/build.py
 ```
 
-The build intentionally has `noindex,follow` because it duplicates the live site's text. Booking links lead to Sarasin Clinic's existing booking system.
+The generator imports the existing Haarfillers routes and the Dutch clinic resources listed in `tools/clinic_content.py`. That file also holds the patient questions and treatment-team data. `content-inventory.json` records source URLs. Separate clinical approval is still pending for the patient answers and inherited treatment claims.
 
-## Verification
+## Brand and imagery
 
-On 19 November 2026, the build generated 56 routes, and a static link and asset audit found zero broken local routes and zero missing local images. The homepage, men, and prices pages were reviewed in a desktop browser. Responsive CSS is included, but physical phone testing and a full treatment booking were not performed.
+- The site uses the exact Sarasin wordmark vector from the public [webshop](https://www.sarasin.shop/) with a separate Clinic line.
+- The waiting area, reception and treatment-room photos come from the official [Beveren location page](https://sarasinclinic.com/the-clinic/beveren/). The Beveren page links to Sarasin Clinic’s [Beveren sneak peek](https://www.youtube.com/watch?v=mkb5j9Rtv8U).
+- The four doctors listed for Hairfiller and their RIZIV numbers are sourced from the [Sarasin Clinic team](https://sarasinclinic.com/over-ons/team/). The doctor cards link to the most specific official profile available.
+- Existing patient results come from the clinic’s public photo gallery. Illustrative consultation images are identified where used.
+
+## Search access
+
+`tools/build.py` generates the canonical URLs, sitemap, and robots.txt for the public Vercel host. Booking, thank-you, and policy pages are excluded from the sitemap. If the indexed hostname changes, update `PUBLIC_SITE` and regenerate before publishing. Google and OpenAI decide when to crawl and which pages to show. Actual crawl records require Search Console or hosting logs.

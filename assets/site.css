@@ -296,7 +296,7 @@ details[open] .disclosure-minus { display: inline-block; }
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 950px) {
   .menu-toggle {
     display: grid;
     place-items: center;

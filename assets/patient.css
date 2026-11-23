@@ -1,0 +1,155 @@
+/* Patient entry points and the shared Sarasin Clinic brand. */
+:root {
+  --consult-bg: #874831;
+  --consult-hover: #6d3522;
+}
+
+.clinic-wordmark {
+  display: inline-grid;
+  justify-items: center;
+  gap: 5px;
+  width: clamp(116px, 11vw, 152px);
+  color: #646461;
+}
+
+.clinic-wordmark img { display: block; width: 100%; height: auto; }
+.clinic-wordmark > span {
+  padding-left: .32em;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .32em;
+  line-height: 1;
+}
+
+.site-footer .clinic-wordmark { filter: brightness(0) invert(1); margin-bottom: 16px; }
+
+body .header-cta,
+body .button-primary,
+body .home-hero .button-primary,
+body .editorial-hero .button-primary,
+body .closing .button-primary,
+body .mobile-nav .mobile-nav-book {
+  background: var(--consult-bg);
+  color: #fff;
+  gap: 8px;
+  white-space: normal;
+}
+
+body .header-cta:hover,
+body .button-primary:hover,
+body .home-hero .button-primary:hover,
+body .editorial-hero .button-primary:hover,
+body .closing .button-primary:hover,
+body .mobile-nav .mobile-nav-book:hover {
+  background: var(--consult-hover);
+  color: #fff;
+}
+
+.route-home .home-hero { padding-bottom: clamp(24px, 3vw, 44px); }
+.route-home .home-hero h1 { max-width: 13ch; letter-spacing: -.04em; }
+.home-hero .hero-intro { max-width: 52ch; }
+.patient-section {
+  padding: clamp(32px, 5vw, 72px) var(--site-gutter);
+  background: var(--white);
+  color: var(--forest);
+}
+
+.route-home .patient-section { background: var(--paper); }
+.patient-section h2 {
+  max-width: 26ch;
+  margin: 0 0 20px;
+  font: 550 clamp(28px, 4vw, 52px)/1.11 Manrope, sans-serif;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+
+.patient-options,
+.patient-answers,
+.library-groups,
+.doctor-profiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px clamp(16px, 2.5vw, 36px);
+}
+
+.patient-options { margin-bottom: 22px; }
+.patient-options a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 48px;
+  padding: 13px 16px;
+  border: 1px solid #b8c9bd;
+  border-radius: var(--radius-media);
+  color: var(--forest);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.patient-options a:hover,
+.patient-options a:focus-visible { background: var(--sage); }
+
+.patient-answer {
+  min-width: 0;
+  padding: 20px 0 16px;
+  border-top: 1px solid #c8d2c7;
+  scroll-margin-top: 24px;
+}
+
+.patient-answer:target {
+  padding-inline: 12px;
+  border-radius: var(--radius-detail);
+  background: #edf1eb;
+}
+
+.patient-answer h3,
+.library-groups h3,
+.doctor-profile h3 {
+  margin: 0 0 8px;
+  color: var(--forest);
+  font: 700 clamp(18px, 2vw, 24px)/1.2 Manrope, sans-serif;
+  overflow-wrap: anywhere;
+}
+
+.patient-answer p,
+.doctor-profile p { margin: 0 0 12px; color: #43574f; line-height: 1.55; }
+.patient-section a { text-underline-offset: 3px; }
+.patient-section :focus-visible { outline: 2px solid var(--consult-bg); outline-offset: 3px; }
+.clinic-library { background: #edf1eb; }
+.library-groups ul { margin: 0; padding-left: 20px; }
+.library-groups li { margin: 9px 0; overflow-wrap: anywhere; }
+.doctor-profiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+.doctor-profile {
+  display: grid;
+  grid-template-columns: clamp(82px, 12vw, 142px) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(12px, 2vw, 24px);
+  padding: clamp(14px, 2.5vw, 28px);
+  border-radius: var(--radius-surface);
+  background: #edf1eb;
+}
+
+.doctor-profile img { width: 100%; height: auto; object-fit: contain; border-radius: var(--radius-media); }
+.doctor-profile a { display: inline-flex; flex-wrap: wrap; gap: 8px; }
+.article-shell .source-content { min-width: 0; }
+.article-shell .source-content h2 { overflow-wrap: anywhere; }
+.article-shell .source-content li { overflow-wrap: anywhere; }
+.article-shell .source-content img { height: auto; }
+.route-sarasin-clinic-beveren .location-photos img { aspect-ratio: auto; }
+.closing img { object-position: center; }
+
+@media (max-width: 950px) {
+  .desktop-nav, .header-cta { display: none; }
+  .site-header { height: 66px; }
+  .doctor-profiles { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 680px) {
+  .patient-options, .patient-answers, .library-groups { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .patient-options { margin-bottom: 18px; }
+  .patient-answer { padding-block: 15px; }
+  .home-hero .hero-actions { gap: 14px; }
+  .home-hero .hero-intro { display: block; overflow: visible; }
+}
