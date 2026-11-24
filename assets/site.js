@@ -47,6 +47,7 @@ if (videoDialog?.showModal) {
   const player = videoDialog.querySelector('.video-dialog-player');
   const title = videoDialog.querySelector('h3');
   const source = videoDialog.querySelector('.video-dialog-source');
+  const description = videoDialog.querySelector('.video-dialog-description');
   let opener;
 
   videoGallery.addEventListener('click', (event) => {
@@ -56,6 +57,7 @@ if (videoDialog?.showModal) {
     event.preventDefault();
     opener = card;
     title.textContent = card.querySelector('strong').textContent;
+    description.textContent = card.querySelector('.video-preview-description').textContent;
     source.href = card.href;
 
     const youtubeId = card.dataset.youtube;
@@ -67,6 +69,7 @@ if (videoDialog?.showModal) {
       media.src = `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&playsinline=1`;
     } else {
       media.setAttribute('aria-label', title.textContent);
+      media.setAttribute('aria-describedby', description.id);
       media.controls = true;
       media.playsInline = true;
       media.src = card.href;

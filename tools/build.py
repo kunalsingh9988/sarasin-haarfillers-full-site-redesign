@@ -8,13 +8,14 @@ import html
 import json
 import re
 from pathlib import Path
-from urllib.parse import urljoin, urlparse, unquote
+from urllib.parse import parse_qs, urljoin, urlparse, unquote
 from xml.etree import ElementTree as ET
 
 import requests
 from bs4 import BeautifulSoup, Comment
 
 from blog_content import POSTS, TREATMENT
+from media_content import CLIPS, IMAGE_ALT, VIDEO_DESCRIPTIONS
 
 from clinic_content import (ANSWERS, BEVEREN, BOOK_LABEL, CLINIC, CONCERNS, DOCTORS,
                             SOURCE_GROUPS, answer_card, clinic_route)
@@ -440,14 +441,13 @@ def feature_module(page):
     if path == "/":
         man = source_asset("https://www.haarfillers.com/wp-content/uploads/2022/12/2022-12-23_SarasinClinic_Haarfiller-man_06.jpg")
         woman = source_asset("https://www.haarfillers.com/wp-content/uploads/2022/12/2022-12-23_SarasinClinic_Haarfiller-vrouw_03.jpg")
-        return f'''<section class="feature-module pathway-module"><div class="module-heading"><p class="section-kicker">KIES JOUW ROUTE</p><h2>Begin bij jouw verhaal.</h2><p>Haarverlies ziet er bij iedereen anders uit. Lees verder over de behandeling, of start met een persoonlijke consultatie.</p></div><div class="pathway-grid"><a href="/mannen/"><img src="{escape(man)}" alt="Haarfiller foto uit de Sarasin Clinic mannengalerij"><span>Voor mannen</span><strong>Behoud en versterk het haar dat er is.</strong><em>Ontdek de behandeling {ui_icon("arrow-up-right")}</em></a><a href="/vrouwen/"><img src="{escape(woman)}" alt="Haarfiller foto uit de Sarasin Clinic vrouwengalerij"><span>Voor vrouwen</span><strong>Een plan dat rekening houdt met jouw haarverlies.</strong><em>Ontdek de behandeling {ui_icon("arrow-up-right")}</em></a></div></section>'''
+        return f'''<section class="feature-module pathway-module"><div class="module-heading"><p class="section-kicker">KIES JOUW ROUTE</p><h2>Begin bij jouw verhaal.</h2><p>Haarverlies ziet er bij iedereen anders uit. Lees verder over de behandeling, of start met een persoonlijke consultatie.</p></div><div class="pathway-grid"><a href="/mannen/"><img src="{escape(man)}" alt="Kruin van een man met bruin haar voor en na Hairfiller"><span>Voor mannen</span><strong>Behoud en versterk het haar dat er is.</strong><em>Ontdek de behandeling {ui_icon("arrow-up-right")}</em></a><a href="/vrouwen/"><img src="{escape(woman)}" alt="Haarscheiding van een vrouw met bruin haar voor en na Hairfiller"><span>Voor vrouwen</span><strong>Een plan dat rekening houdt met jouw haarverlies.</strong><em>Ontdek de behandeling {ui_icon("arrow-up-right")}</em></a></div></section>'''
     if path == "/prijzen/":
         cards = ''.join(f'<div class="price-card"><img src="{escape(source_asset(im))}" alt="Illustratie {escape(name.lower())}"><div><h3>{name}</h3><p>{size}</p><strong>{price}</strong><span>per sessie</span></div></div>' for name,size,price,im in TREATMENT_ZONES)
         return '<section class="feature-module price-module"><div class="module-heading"><p class="section-kicker">TRANSPARANTE PRIJZEN</p><h2>Een helder overzicht per zone.</h2><p>Het aantal behandelingen en de geschikte zone worden tijdens een consultatie besproken.</p></div><div class="price-grid">'+cards+'</div></section>'
     if path in {"/mannen/", "/vrouwen/"}:
-        poster = "/assets/hairfiller-women-poster.jpg" if path == "/vrouwen/" else "/assets/hairfiller-treatment-poster.jpg"
-        video = "/assets/hairfiller-women.mp4" if path == "/vrouwen/" else "/assets/hairfiller-treatment.mp4"
-        return f'''<section class="feature-module journey-module"><div class="module-heading"><p class="section-kicker">ZO VERLOOPT HET</p><h2>Vier momenten in je behandeltraject.</h2><p>Bekijk echte Sarasin Clinic beelden van de hoofdhuid en de behandeling.</p></div><div class="journey-layout"><div class="journey-steps"><p><strong>01 · Consultatie</strong><span>We bekijken je hoofdhuid, haarverlies en verwachtingen.</span></p><p><strong>02 · Persoonlijk plan</strong><span>De behandelaar bespreekt of haarfillers passend zijn.</span></p><p><strong>03 · Behandeling</strong><span>De injecties worden in de gekozen zones toegediend.</span></p><p><strong>04 · Opvolging</strong><span>We evalueren het verloop en bespreken eventuele onderhoudssessies.</span></p></div><figure><video controls preload="none" poster="{poster}" aria-label="Sarasin Clinic haarfiller behandelvideo"><source src="{video}" type="video/mp4">Je browser ondersteunt deze video niet.</video><figcaption>Beeld uit een bestaande Sarasin Clinic behandelvideo.</figcaption></figure></div></section>'''
+        video = CLIPS[1] if path == "/vrouwen/" else CLIPS[0]
+        return f'''<section class="feature-module journey-module"><div class="module-heading"><p class="section-kicker">ZO VERLOOPT HET</p><h2>Vier momenten in je behandeltraject.</h2><p>Bekijk echte Sarasin Clinic beelden van de hoofdhuid en de behandeling.</p></div><div class="journey-layout"><div class="journey-steps"><p><strong>01 · Consultatie</strong><span>We bekijken je hoofdhuid, haarverlies en verwachtingen.</span></p><p><strong>02 · Persoonlijk plan</strong><span>De behandelaar bespreekt of haarfillers passend zijn.</span></p><p><strong>03 · Behandeling</strong><span>De injecties worden in de gekozen zones toegediend.</span></p><p><strong>04 · Opvolging</strong><span>We evalueren het verloop en bespreken eventuele onderhoudssessies.</span></p></div><figure><video controls preload="none" poster="/assets/{video[1]}" aria-label="{escape(video[0])}" aria-describedby="journey-video-description"><source src="{video[2]}" type="video/mp4">Je browser ondersteunt deze video niet.</video><figcaption id="journey-video-description">{escape(video[4])}</figcaption></figure></div></section>'''
     if path == "/voor-en-na/":
         urls = [
             "https://www.haarfillers.com/wp-content/uploads/2022/12/2022-12-23_SarasinClinic_Haarfiller-vrouw_03.jpg",
@@ -455,7 +455,7 @@ def feature_module(page):
             "https://www.haarfillers.com/wp-content/uploads/2023/09/2023-09_haarfiller-man_04.jpg",
             "https://www.haarfillers.com/wp-content/uploads/2023/09/2023-09_haarfiller-vrouw_01.jpg",
         ]
-        tiles = ''.join(f'<figure><div class="comparison-labels" lang="en" translate="no" aria-hidden="true"><span>Before</span><span>After</span></div><img src="{escape(source_asset(u))}" alt="Voor en na een haarfillerbehandeling bij Sarasin Clinic" loading="lazy" decoding="async"></figure>' for u in urls)
+        tiles = ''.join(f'<figure><div class="comparison-labels" aria-hidden="true"><span>Voor</span><span>Na</span></div><img src="{escape(source_asset(u))}" alt="Voor en na een haarfillerbehandeling bij Sarasin Clinic" loading="lazy" decoding="async"></figure>' for u in urls)
         return '<section class="feature-module results-module"><div class="module-heading"><p class="section-kicker">ECHTE RESULTATEN</p><h2>Bekijk de verandering van dichtbij.</h2><p>De beelden komen uit de bestaande Sarasin Clinic galerij. Resultaten verschillen per persoon.</p></div><div class="results-grid">'+tiles+'</div></section>'
     if path == "/sarasin-clinic/":
         places = [
@@ -492,7 +492,7 @@ def feature_module(page):
         gallery = ''.join(f'<figure><img src="{escape(source_asset(u))}" alt="Bestaande Sarasin Clinic reviewafbeelding" loading="lazy"></figure>' for u in shots)
         return '<section class="feature-module review-feature"><div class="module-heading"><p class="section-kicker">ERVARINGEN</p><h2>Lees hoe bezoekers hun bezoek beleefden.</h2><p>De beoordelingen komen uit de bestaande Sarasin Clinic reviewcollectie. Sommige gaan over de clinic in het algemeen; ervaringen met haarfillers vind je in de volledige inhoud hieronder.</p></div><div class="review-mosaic">'+gallery+'</div></section>'
     if path == "/videos/":
-        return '''<section class="feature-module video-feature"><div class="module-heading"><p class="section-kicker">BEKIJK DE BEHANDELING</p><h2>Zie de stappen in plaats van ze alleen te lezen.</h2><p>Twee bestaande Sarasin Clinic video's tonen hoe de hoofdhuid wordt voorbereid en hoe een behandeling verloopt.</p></div><div class="video-grid"><figure><video controls preload="none" poster="/assets/hairfiller-treatment-poster.jpg" aria-label="Haarfiller behandeling"><source src="/assets/hairfiller-treatment.mp4" type="video/mp4">Je browser ondersteunt deze video niet.</video><figcaption><strong>Behandeling in beeld</strong><span>Haarfiller behandeling bij Sarasin Clinic</span></figcaption></figure><figure><video controls preload="none" poster="/assets/hairfiller-women-poster.jpg" aria-label="Haarfiller behandeling bij een vrouw"><source src="/assets/hairfiller-women.mp4" type="video/mp4">Je browser ondersteunt deze video niet.</video><figcaption><strong>Behandeling bij vrouwen</strong><span>Hoofdhuid en behandelzone van dichtbij</span></figcaption></figure></div></section>'''
+        return home_video_gallery(archive=True)
     return ""
 
 
@@ -511,7 +511,7 @@ def home_treatment():
     )
     return f'''<section class="process-feature" aria-labelledby="home-treatment-title">
         <div class="process-image">
-            <video controls playsinline preload="none" poster="/assets/hairfiller-treatment-poster.jpg" aria-label="Sarasin Clinic behandelvideo">
+            <video controls playsinline preload="none" poster="/assets/hairfiller-treatment-poster.jpg" aria-label="{escape(CLIPS[0][0])}" aria-describedby="home-process-video-description">
                 <source src="/assets/hairfiller-treatment.mp4" type="video/mp4">
                 Je browser ondersteunt deze video niet.
             </video>
@@ -519,7 +519,7 @@ def home_treatment():
         <div class="process-copy">
             <h2 id="home-treatment-title">Jouw haartraject</h2>
             <ol class="process-steps" role="list">{rows}</ol>
-            <p class="image-disclosure">Behandelbeelden van Sarasin Clinic.</p>
+            <p class="image-disclosure" id="home-process-video-description">{escape(CLIPS[0][4])}</p>
             <a class="inline-link" href="/videos/">Bekijk alle video’s {ui_icon("arrow-up-right")}</a>
         </div>
     </section>'''
@@ -532,7 +532,7 @@ def home_results():
     ]
     photos = "".join(
         f'''<figure class="home-result-card">
-            <div class="home-result-labels" aria-hidden="true" lang="en" translate="no"><span>Before</span><span>After</span></div>
+            <div class="home-result-labels" aria-hidden="true"><span>Voor</span><span>Na</span></div>
             <img src="{photo}" alt="{alt}" width="800" height="{height}" loading="lazy" decoding="async">
         </figure>'''
         for photo, alt, height in cases
@@ -624,39 +624,36 @@ def home_reviews():
         ("Een zeer vriendelijke ontvangst gevolgd door een professionele analyse. Ik voelde ook het enthousiasme voor het vak wat altijd veel vertrouwen geeft. Ik boek snel mijn volgende sessie in.", "Edward R.", "Ervaring met Sarasin Clinic"),
     ]
     cards = ''.join(f'<figure class="home-review"><blockquote>“{escape(quote)}”</blockquote><figcaption><strong>{escape(name)}</strong><span>{escape(context)}</span></figcaption></figure>' for quote,name,context in quotes)
-    return f'''<section class="home-reviews" aria-labelledby="home-reviews-title"><div class="home-reviews-head"><div><h2 id="home-reviews-title">Ervaringen, in eigen woorden.</h2><p>Reacties uit de bestaande Sarasin Clinic reviewcollectie. Sommige ervaringen gaan over de clinic in het algemeen.</p></div><a href="/reviews/">Bekijk alle reviews {ui_icon("arrow-up-right")}</a></div><div class="home-review-grid">{cards}</div></section>'''
+    return f'''<section class="home-reviews" id="haarfiller-reviews" aria-labelledby="home-reviews-title"><div class="home-reviews-head"><div><h2 id="home-reviews-title">Ervaringen, in eigen woorden.</h2><p>Reacties uit de bestaande Sarasin Clinic reviewcollectie. Sommige ervaringen gaan over de clinic in het algemeen.</p></div><a href="/reviews/">Bekijk alle reviews {ui_icon("arrow-up-right")}</a></div><div class="home-review-grid">{cards}</div></section>'''
 
 
-def home_video_gallery():
-    clips = [
-        ("Zo verloopt de behandeling", "/assets/hairfiller-treatment-poster.jpg", "/assets/hairfiller-treatment.mp4", ""),
-        ("Haarfillers bij vrouwen", "/assets/hairfiller-women-poster.jpg", "/assets/hairfiller-women.mp4", ""),
-        ("Tussentijds resultaat", "/assets/hairfiller-progress-poster.webp", "/assets/hairfiller-progress.mp4", ""),
-        ("Hairfiller Magic met Peter Vanlaet", "/assets/hairfiller-magic-poster.webp", "https://www.youtube.com/watch?v=WdqKQ2NF8t8", "WdqKQ2NF8t8"),
-        ("Voor en na bij een man", "/assets/hairfiller-story-poster.webp", "/assets/hairfiller-story.mp4", ""),
-    ]
+def home_video_gallery(archive=False):
     cards = []
-    for title, poster, url, youtube_id in clips:
+    for title, poster, url, youtube_id, description in CLIPS:
         embed = f' data-youtube="{youtube_id}"' if youtube_id else ""
         cards.append(f'''<a class="video-preview" href="{url}"{embed}>
             <span class="video-preview-media">
-                <img src="{poster}" alt="" loading="lazy" decoding="async">
+                <img src="/assets/{poster}" alt="{escape(IMAGE_ALT[Path(poster).stem])}" loading="lazy" decoding="async">
                 <span class="video-preview-play">{ui_icon("play")}</span>
             </span>
             <strong>{escape(title)}</strong>
+            <span class="video-preview-description">{escape(description)}</span>
         </a>''')
+    more_url = "#pagina-informatie" if archive else "/videos/"
+    more_label = "Bekijk het videoarchief" if archive else "Bekijk alle video’s"
     return f'''<section class="home-videos" aria-labelledby="home-videos-title" id="haarfiller-videos">
     <div class="home-videos-heading">
         <h2 id="home-videos-title">Video’s over haarfillers</h2>
-        <a class="inline-link" href="/videos/">Bekijk alle video’s {ui_icon("arrow-up-right")}</a>
+        <a class="inline-link" href="{more_url}">{more_label} {ui_icon("arrow-up-right")}</a>
     </div>
     <div class="video-preview-grid" role="group" aria-label="Haarfillervideo’s" tabindex="0">{"".join(cards)}</div>
-    <dialog class="video-dialog" aria-labelledby="video-dialog-title">
+    <dialog class="video-dialog" aria-labelledby="video-dialog-title" aria-describedby="video-dialog-description">
         <div class="video-dialog-header">
             <h3 id="video-dialog-title"></h3>
             <button type="button" class="video-dialog-close" aria-label="Sluit video" autofocus>{ui_icon("x")}</button>
         </div>
         <div class="video-dialog-player"></div>
+        <p class="video-dialog-description" id="video-dialog-description"></p>
         <a class="inline-link video-dialog-source" target="_blank" rel="noopener">Open originele video {ui_icon("arrow-up-right")}</a>
     </dialog>
 </section>'''
@@ -675,7 +672,7 @@ def home_hero_results():
     dots = '<span class="transformation-dot is-current"></span>' + '<span class="transformation-dot"></span>' * (len(cases) - 1)
     return f'''<figure class="home-transformation">
         <div class="transformation-photo">
-            <div class="transformation-labels" aria-hidden="true" lang="en" translate="no"><span>Before</span><span>After</span></div>
+            <div class="transformation-labels" aria-hidden="true"><span>Voor</span><span>Na</span></div>
             <div class="transformation-images">{"".join(photos)}</div>
         </div>
         <div class="transformation-controls" hidden>
@@ -790,6 +787,14 @@ def page_html(page, library):
     photo = hero_image(page) if not is_home else None
     hero_copy = f'''<div class="hero-inner"><h1>{display_title}</h1><p class="hero-intro">{desc}</p><div class="hero-actions"><a class="button-primary" href="{BOOK}">{BOOK_LABEL} {ui_icon("arrow-up-right")}</a><a class="button-text" href="/voor-en-na/">Bekijk resultaten {ui_icon("arrow-up-right")}</a></div></div>'''
     if is_home:
+        quick_links = (
+            ("#haarfiller-resultaten", "Voor en na", "images"),
+            ("#haarfiller-prijzen", "Prijzen", "euro"),
+            ("#haarfiller-reviews", "Reviews", "clipboard-list"),
+            ("#haarfiller-videos", "Video’s", "play"),
+        )
+        jumps = "".join(f'<a href="{href}">{ui_icon(icon)} {label}</a>' for href, label, icon in quick_links)
+        hero_copy = hero_copy.removesuffix("</div>") + f'<nav class="home-priority-links" aria-label="Direct naar">{jumps}</nav></div>'
         hero = f'<section class="hero home-hero">{hero_copy}{home_hero_results()}</section>'
     else:
         hero = editorial_hero(page, display_title, desc, photo)
@@ -838,7 +843,7 @@ def page_html(page, library):
         add_article_photos(body, page, photo)
     article_heading = f'<div class="article-lead"><h2>{title}</h2></div>' if path in SHORT_TITLES and not is_home else ''
     sidebar = f'''<aside class="article-aside"><p>Op deze pagina</p><nav aria-label="Op deze pagina">{"".join(contents)}</nav></aside>''' if contents else ""
-    article = home_essentials() + home_clinic() + home_reviews() if is_home else f'''<section class="article-shell" id="pagina-informatie">
+    article = home_essentials() + home_clinic() if is_home else f'''<section class="article-shell" id="pagina-informatie">
         {breadcrumb}{article_heading}
         <div class="article-grid">{sidebar}<article class="source-content">{body}</article></div>
     </section>'''
@@ -851,18 +856,17 @@ def page_html(page, library):
         article += '<section class="patient-section"><h2>Verder lezen over je haar</h2><p><a href="/faq/#kennisbank">Alle artikels over haarverlies</a> · <a href="/faq/#vragen-haarverlies">Veelgestelde vragen</a></p></section>'
     if path == "/faq/":
         article = question_hub() + clinic_library(library) + article
-    previews = home_results() + home_prices() if is_home else ""
+    previews = home_results() + home_prices() + home_reviews() + home_video_gallery() if is_home else ""
     if is_home:
         article += blog_preview()
-    gallery = home_video_gallery() if is_home else ""
     nearby = next_steps()
     closing_photo = BEVEREN
     closing_alt = "Wachtruimte van Sarasin Clinic Beveren"
     closing = f'''<section class="closing"><div><p class="section-kicker">SARASIN CLINIC</p><h2>Goed advies begint met goed kijken.</h2><p>Vertel ons wat je merkt aan je haar. Tijdens een gratis consultatie bekijken we samen wat voor jou passend is.</p><a class="button-primary" href="{BOOK}">{BOOK_LABEL} {ui_icon("arrow-up-right")}</a></div><img src="{escape(closing_photo)}" alt="{closing_alt}" loading="lazy"></section>'''
-    intro_modules = patient_concerns() + process + quick if is_home else ""
+    intro_modules = patient_concerns() + previews + process + quick if is_home else ""
     featured = feature_module(page)
-    return (head + nav() + '<main id="hoofdinhoud">' + hero + intro_modules + featured + previews
-            + article + gallery + nearby + closing + '</main>' + footer() + '</body></html>')
+    return (head + nav() + '<main id="hoofdinhoud">' + hero + intro_modules + featured
+            + article + nearby + closing + '</main>' + footer() + '</body></html>')
 
 
 def import_clinic_page(source):
@@ -942,6 +946,34 @@ def write_page(target, html_text):
     target.write_text("\n".join(line.rstrip() for line in html_text.split("\n")), encoding="utf-8")
 
 
+def enrich_media(soup):
+    changed = False
+    for image in soup.select("img[src]"):
+        src = Path(unquote(urlparse(image["src"]).path)).stem
+        alt = IMAGE_ALT.get(src)
+        if alt and image.get("alt") != alt:
+            image["alt"] = alt
+            changed = True
+    for link in soup.select('main a[href*="youtube.com/"], main a[href*="youtu.be/"]'):
+        if "video-preview" in link.get("class", []):
+            continue
+        url = urlparse(link["href"])
+        if url.hostname not in {"www.youtube.com", "youtube.com", "youtu.be"}:
+            continue
+        video_id = url.path.rsplit("/", 1)[-1] if url.path.startswith("/embed/") or url.hostname == "youtu.be" else parse_qs(url.query).get("v", [""])[0]
+        description = VIDEO_DESCRIPTIONS.get(video_id)
+        if description:
+            label = link.get_text(" ", strip=True)
+            if not label or re.match(r"Bekijk (?:de video|video \d+ van Sarasin Clinic)$", label):
+                link.string = "Video · " + description
+            else:
+                note = soup.new_tag("span", attrs={"class": "archive-video-description"})
+                note.string = description
+                link.insert_after(note)
+            changed = True
+    return changed
+
+
 def main():
     pages = get_pages()
     with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
@@ -995,7 +1027,7 @@ def main():
     for page in results:
         target = ROOT / page["path"].lstrip("/") / "index.html" if page["path"] != "/" else ROOT / "index.html"
         soup = BeautifulSoup(target.read_text(encoding="utf-8"), "html.parser")
-        changed = False
+        changed = enrich_media(soup)
         for a in soup.find_all("a", href=True):
             href = a["href"]
             if href in clinic_routes and "clinic-source" not in a.get("class", []):

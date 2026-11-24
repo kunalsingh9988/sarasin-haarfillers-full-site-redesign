@@ -1,7 +1,7 @@
 /* Patient entry points and the shared Sarasin Clinic brand. */
 :root {
-  --consult-bg: #874831;
-  --consult-hover: #6d3522;
+  --consult-bg: #173f41;
+  --consult-hover: #285859;
 }
 
 .clinic-wordmark {
@@ -211,3 +211,38 @@ body .mobile-nav .mobile-nav-book:hover {
   .concern-grid { grid-template-columns: minmax(0, 1fr); }
   .concern-trigger img { max-height: 190px; }
 }
+
+.home-priority-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: clamp(16px, 2.5vw, 26px);
+}
+
+.home-priority-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  min-height: 44px;
+  border: 1px solid #becbc0;
+  border-radius: var(--radius-pill);
+  color: var(--forest);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.home-priority-links a:hover { background: var(--sage); }
+.home-priority-links a:focus-visible { outline: 2px solid var(--consult-bg); outline-offset: 3px; }
+.route-home :is(.home-results, .home-prices, .home-reviews, .home-videos) { scroll-margin-top: 20px; }
+
+.video-preview-description, .archive-video-description {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.video-dialog-description { margin: 12px 0 0; line-height: 1.5; }
