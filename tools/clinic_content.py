@@ -44,15 +44,19 @@ ANSWERS = (
 
 DOCTORS = (
     ("Dr. Van Gasse", "1-05198-89-000", "Dr.-Van-Gasse.png", "Sint-Martens-Latem en Beveren",
-     "Geneeskunde en tandheelkunde aan KU Leuven. Fellowship esthetische geneeskunde aan het Harley Street Institute in Londen.",
+     ("Geneeskunde en tandheelkunde aan KU Leuven. Fellowship esthetische geneeskunde aan het Harley Street Institute in Londen.",),
      CLINIC + "/over-ons/team/dr-van-gasse/"),
     ("Dr. Zin Mar Aung", "1-09103-11-000", "Dr.Zin-Mar-Aung.png", "Sint-Martens-Latem",
-     "Actief in esthetische behandelingen sinds 2023.", CLINIC + "/over-ons/team/"),
+     ("Actief in esthetische behandelingen sinds 2023.",
+      "Opleiding aan Shanghai Jiao Tong University",
+      "Master of Medicine (Surgery), 2018",
+      "Doctoraatsopleiding in chirurgie afgerond, 2022"),
+     CLINIC + "/over-ons/team/"),
     ("Dr. Valérie Debeuf", "1-10769-36-000", "Dr.-Debeuf.png", "Sint-Martens-Latem en Beveren",
-     "Opleiding geneeskunde aan KU Leuven, gevolgd door verdere opleiding in medische gelaatsesthetiek.",
+     ("Opleiding geneeskunde aan KU Leuven, gevolgd door verdere opleiding in medische gelaatsesthetiek.",),
      CLINIC + "/over-ons/team/dr-debeuf/"),
     ("Dr. Monné", "1-15526-85-000", "Dr.-Monne.png", "Sint-Martens-Latem",
-     "Actief in esthetische behandelingen sinds 2025.", CLINIC + "/over-ons/team/"),
+     ("Actief in esthetische behandelingen sinds 2025.",), CLINIC + "/over-ons/team/"),
 )
 
 # Dutch Hairfiller treatment tree and directly related articles in the clinic sitemap.

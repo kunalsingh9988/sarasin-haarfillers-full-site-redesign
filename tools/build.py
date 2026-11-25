@@ -342,10 +342,11 @@ def doctor_cards():
     cards = []
     for name, riziv, photo, locations, qualifications, link in DOCTORS:
         image = source_asset(BASE + "/wp-content/uploads/2026/09/" + photo)
+        qualification_paragraphs = "".join(f"<p>{escape(line)}</p>" for line in qualifications)
         cards.append(f'''<article class="doctor-profile">
             <img src="{escape(image)}" alt="Portret van {escape(name)}" loading="lazy" decoding="async">
             <div><h3>{escape(name)}</h3><p>Arts · Hairfiller · {escape(locations)}</p>
-            <p><strong>RIZIV-nummer</strong> {riziv}</p><p>{escape(qualifications)}</p>
+            <p><strong>RIZIV-nummer</strong> {riziv}</p>{qualification_paragraphs}
             <a class="inline-link" href="{link}">Profiel bij Sarasin Clinic {ui_icon("arrow-up-right")}</a></div>
         </article>''')
     return ('<section class="patient-section" id="haarfiller-artsen"><h2>Artsen die Hairfiller uitvoeren</h2>'
