@@ -227,7 +227,7 @@ def ui_icon(name, extra_class=""):
     return f'<svg class="{classes}" aria-hidden="true" focusable="false"><use href="/assets/lucide.svg#{name}"></use></svg>'
 
 
-def next_steps():
+def next_steps(path):
     portraits = [
         ("cf5f1d632b", "Karen Sarasin"),
         ("ff33a39ffc", "Dr. Van Gasse"),
@@ -240,9 +240,12 @@ def next_steps():
         f'<img src="/assets/next-team-{asset}.webp" alt="{name}" width="256" height="256" loading="lazy" decoding="async">'
         for asset, name in portraits
     )
+    results = ("/assets/source/8905a3cd60.jpg", "De kruin van een man voor en na Hairfiller", 653) if path == "/mannen/" else ("/assets/next-steps-result.webp", IMAGE_ALT["next-steps-result"], 607)
+    price_photo, price_width, price_height = ("/assets/hairfiller-women-poster.jpg", 480, 848) if path == "/vrouwen/" else ("/assets/price-treatment-crown.webp", 608, 406)
+    price_alt = IMAGE_ALT[Path(price_photo).stem]
     cards = [
-        ("results", "/voor-en-na/", '<img src="/assets/next-steps-result.webp" alt="" width="800" height="607" loading="lazy" decoding="async">', "Bekijk echte resultaten"),
-        ("price", "/prijzen/", '<img src="/assets/price-treatment-crown.webp" alt="" width="608" height="406" loading="lazy" decoding="async">', "Ontdek de prijzen"),
+        ("results", "/voor-en-na/", f'<img src="{results[0]}" alt="{results[1]}" width="800" height="{results[2]}" loading="lazy" decoding="async">', "Bekijk echte resultaten"),
+        ("price", "/prijzen/", f'<img src="{price_photo}" alt="{price_alt}" width="{price_width}" height="{price_height}" loading="lazy" decoding="async">', "Ontdek de prijzen"),
         ("team", "/sarasin-clinic/ons-team/", team_images, "Maak kennis met het team"),
     ]
     links = "".join(
@@ -378,8 +381,15 @@ def add_article_photos(body, page, hero):
         topic = heading.get_text(" ", strip=True).casefold()
         for terms, photo, caption in ARTICLE_PHOTOS:
             # Treatment results must never represent a different procedure.
-            if photo == "/assets/next-steps-result.webp" and "haarfiller" not in topic:
-                continue
+            if photo == "/assets/next-steps-result.webp":
+                if "haarfiller" not in topic:
+                    continue
+                if path == "/mannen/":
+                    photo = "/assets/source/b98700dcc8.jpg"
+                    caption = "Voor en na een haarfillerbehandeling bij een man"
+            if path == "/vrouwen/" and photo == "/assets/price-treatment-crown.webp":
+                photo = "/assets/hairfiller-women-poster.jpg"
+                caption = "Voorbereiding van de haarlijn tijdens een behandeling bij een vrouw"
             if photo in used or not any(term in topic for term in terms):
                 continue
             if "/haartransplantatie/" in path and "haarfiller" not in topic and photo.startswith("/assets/price-treatment-"):
@@ -789,9 +799,9 @@ def page_html(page, library):
     if is_home:
         quick_links = (
             ("#haarfiller-resultaten", "Voor en na", "images"),
+            ("#haarfiller-videos", "Video’s", "play"),
             ("#haarfiller-prijzen", "Prijzen", "euro"),
             ("#haarfiller-reviews", "Reviews", "clipboard-list"),
-            ("#haarfiller-videos", "Video’s", "play"),
         )
         jumps = "".join(f'<a href="{href}">{ui_icon(icon)} {label}</a>' for href, label, icon in quick_links)
         hero_copy = hero_copy.removesuffix("</div>") + f'<nav class="home-priority-links" aria-label="Direct naar">{jumps}</nav></div>'
@@ -856,14 +866,14 @@ def page_html(page, library):
         article += '<section class="patient-section"><h2>Verder lezen over je haar</h2><p><a href="/faq/#kennisbank">Alle artikels over haarverlies</a> · <a href="/faq/#vragen-haarverlies">Veelgestelde vragen</a></p></section>'
     if path == "/faq/":
         article = question_hub() + clinic_library(library) + article
-    previews = home_results() + home_prices() + home_reviews() + home_video_gallery() if is_home else ""
     if is_home:
         article += blog_preview()
-    nearby = next_steps()
+    nearby = next_steps(path)
     closing_photo = BEVEREN
     closing_alt = "Wachtruimte van Sarasin Clinic Beveren"
     closing = f'''<section class="closing"><div><p class="section-kicker">SARASIN CLINIC</p><h2>Goed advies begint met goed kijken.</h2><p>Vertel ons wat je merkt aan je haar. Tijdens een gratis consultatie bekijken we samen wat voor jou passend is.</p><a class="button-primary" href="{BOOK}">{BOOK_LABEL} {ui_icon("arrow-up-right")}</a></div><img src="{escape(closing_photo)}" alt="{closing_alt}" loading="lazy"></section>'''
-    intro_modules = patient_concerns() + previews + process + quick if is_home else ""
+    intro_modules = (home_results() + home_video_gallery() + patient_concerns() + home_prices() + home_reviews()
+                     + process + quick) if is_home else ""
     featured = feature_module(page)
     return (head + nav() + '<main id="hoofdinhoud">' + hero + intro_modules + featured
             + article + nearby + closing + '</main>' + footer() + '</body></html>')

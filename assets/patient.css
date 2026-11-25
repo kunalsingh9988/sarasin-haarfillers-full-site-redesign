@@ -40,6 +40,9 @@ body .mobile-nav .mobile-nav-book:hover {
   color: #fff;
 }
 
+body .closing .button-primary { box-shadow: inset 0 0 0 1px #b9cabf; }
+.journey-module { background: #eeeae0; }
+
 .route-home .home-hero { padding-bottom: clamp(24px, 3vw, 44px); }
 .route-home .home-hero h1 { max-width: 13ch; letter-spacing: -.04em; }
 .home-hero .hero-intro { max-width: 52ch; }
