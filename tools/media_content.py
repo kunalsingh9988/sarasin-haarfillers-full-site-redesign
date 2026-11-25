@@ -1,5 +1,43 @@
 """Reviewed Dutch descriptions for Sarasin Clinic media."""
 
+CLIENT_MEDIA = "/assets/clinic-media/"
+BEVEREN_WAITING = CLIENT_MEDIA + "beveren-wachtruimte.webp"
+BEVEREN_RECEPTION = CLIENT_MEDIA + "beveren-onthaal.webp"
+BEVEREN_TOUR = "https://www.youtube.com/watch?v=mkb5j9Rtv8U"
+
+# Clinic-supplied comparisons. Keep the original layout and labels on each image.
+RESULT_PHOTOS = (
+    ("01", 1080, "Voor en na naast elkaar, met donker haar dat bij de kruin opzij wordt gehouden"),
+    ("16", 1080, "Twee bovenaanzichten van een kruin met lichtbruin haar voor en na Hairfiller"),
+    ("11", 1350, "Voor en na naast elkaar, met een bovenaanzicht van de voorste haarlijn"),
+    ("12", 1350, "Foto’s naast elkaar van kort bruin haar voor en na Hairfiller"),
+    ("10", 1350, "Voor en na naast elkaar, met een middenscheiding in donker haar"),
+    ("09", 1350, "Twee zijaanzichten van de slaap en haarlijn, boven voor en onder na"),
+    ("02", 1080, "Twee foto’s naast elkaar van donker haar aan de zijkant van het hoofd"),
+    ("03", 1080, "Voor-en-nafoto’s naast elkaar van lichtbruin haar bij de slaap"),
+    ("04", 1920, "De kruin met kort grijsbruin haar voor en na Hairfiller, boven en onder"),
+    ("05", 1920, "Bovenaanzicht van bruin haar, met de voorfoto boven en de opvolgfoto eronder"),
+    ("06", 1920, "Twee boven elkaar geplaatste foto’s van blond haar met een zichtbare scheiding"),
+    ("07", 1920, "Voor en na boven elkaar, met donker haar van bovenaf gefotografeerd"),
+    ("08", 1350, "Twee close-ups van de haarlijn met roodbruin haar en witte pijlen bij de slaap"),
+    ("13", 1075, "Voor en na naast elkaar, met donker haar dat bij de voorste haarlijn opzij wordt gehouden"),
+    ("14", 1350, "Dezelfde roodbruine haarlijn op twee foto’s met het bijschrift Before en After"),
+    ("15", 1080, "De kruin met kort golvend donker haar voor en na Hairfiller"),
+    ("17", 1080, "Voor en na naast elkaar, met kort bruin haar van bovenaf gefotografeerd"),
+    ("18", 1080, "Een nauwere uitsnede van kort bruin haar voor en na Hairfiller"),
+)
+
+BEVEREN_PHOTOS = (
+    ("beveren-onthaal.webp", "Ontvangstbalie van Sarasin Clinic Beveren met het ronde Sarasin-monogram"),
+    ("beveren-wachtruimte-overzicht.webp", "Wachtruimte in Beveren met een bank, lage tafel en verlicht Sarasin-monogram"),
+    ("beveren-behandelruimte-donkere-stoel.webp", "Behandelruimte in Beveren met een donkere behandelstoel en lichte kasten"),
+    ("beveren-gevel.webp", "Witte buitengevel en ingang van Sarasin Clinic Beveren"),
+    ("beveren-wachtruimte.webp", "Zithoek van de wachtruimte in Beveren met een fauteuil en lichte bank"),
+    ("beveren-behandelruimte-witte-stoel.webp", "Lichte behandelruimte in Beveren met een witte stoel en hoog raam"),
+    ("beveren-stoel-detail.webp", "Detail van een donkere behandelstoel met het Sarasin-logo op de hoofdsteun"),
+    ("beveren-behandelstoel-wit.webp", "Witte behandelstoel in Beveren met een voetensteun en een donkere hoofdsteun"),
+)
+
 IMAGE_ALT = {
     "075732bda8": "Screenshot met drie foto’s van dezelfde kruin naast elkaar",
     "15365b0bef": "Drie bovenaanzichten van dezelfde kruin tijdens een behandeltraject",
@@ -74,7 +112,25 @@ IMAGE_ALT = {
     "hairfiller-progress-poster": "Telefoon toont een eerdere foto van een haarscheiding naast opvolgbeelden",
     "hairfiller-magic-poster": "Behandelaar in witte jas zit naast een cliënt bij Sarasin Clinic",
     "hairfiller-story-poster": "Man kijkt in de camera vanuit een behandelstoel",
+    "haarfiller-kruin-opvolging-poster": "Een blauwe handschoen houdt een eerdere foto op een telefoon voor de kruin",
+    "haarfiller-roodbruine-kruin-poster": "Bovenaanzicht van een roodbruine kruin met een eerdere foto in beeld",
+    "haarfiller-haarlijn-van-dichtbij-poster": "Close-up van een haarlijn met een kleiner vergelijkingsbeeld rechtsonder",
+    "haarfiller-hoofdhuid-opvolging-poster": "Behandelaar met blauwe handschoenen maakt een scheiding in bruin haar",
+    "haarfiller-haarlijn-en-kruin-poster": "Spreker in witte jas onder twee vergelijkingsbeelden van de hoofdhuid",
 }
+
+CLIENT_CLIPS = (
+    ("De kruin tijdens een opvolgafspraak", "kruin-opvolging",
+     "Een behandelaar vergelijkt de kruin tijdens een opvolgafspraak met een eerdere foto op een telefoon."),
+    ("Een roodbruine kruin voor en na", "roodbruine-kruin",
+     "Een korte vergelijking met beelden van dezelfde roodbruine kruin op twee momenten."),
+    ("De haarlijn van dichtbij", "haarlijn-van-dichtbij",
+     "Close-ups van de haarlijn en de slaap, met een kleiner vergelijkingsbeeld naast de huidige opname."),
+    ("Een blik op de hoofdhuid bij opvolging", "hoofdhuid-opvolging",
+     "Een behandelaar houdt het haar opzij en toont de hoofdhuid en een eerder beeld tijdens het traject."),
+    ("Uitleg bij beelden van haarverlies", "haarlijn-en-kruin",
+     "Een spreker licht verschillende beelden van de haarlijn, haarscheiding en kruin toe."),
+)
 
 CLIPS = (
     ("Zo verloopt de behandeling", "hairfiller-treatment-poster.jpg", "/assets/hairfiller-treatment.mp4", "",

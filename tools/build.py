@@ -15,7 +15,9 @@ import requests
 from bs4 import BeautifulSoup, Comment
 
 from blog_content import POSTS, TREATMENT
-from media_content import CLIPS, IMAGE_ALT, VIDEO_DESCRIPTIONS
+from media_content import (BEVEREN_PHOTOS, BEVEREN_RECEPTION, BEVEREN_TOUR, BEVEREN_WAITING,
+                           CLIENT_CLIPS, CLIENT_MEDIA, CLIPS, IMAGE_ALT, RESULT_PHOTOS,
+                           VIDEO_DESCRIPTIONS)
 
 from clinic_content import (ANSWERS, BEVEREN, BOOK_LABEL, CLINIC, CONCERNS, DOCTORS,
                             SOURCE_GROUPS, answer_card, clinic_route)
@@ -203,8 +205,8 @@ def hero_image(page):
         "/vrouwen/": "https://www.haarfillers.com/wp-content/uploads/2022/12/2022-12-23_SarasinClinic_Haarfiller-vrouw_03.jpg",
         "/voor-en-na/": "https://www.haarfillers.com/wp-content/uploads/2023/09/2023-09_haarfiller-man_04.jpg",
         "/sarasin-clinic/gent/": "https://www.haarfillers.com/wp-content/uploads/2022/11/SarasinClinic_interieur_Gent_01.jpg",
-        "/sarasin-clinic/beveren/": BEVEREN,
-        "/sarasin-clinic/": "/assets/beveren-reception.webp",
+        "/sarasin-clinic/beveren/": BEVEREN_WAITING,
+        "/sarasin-clinic/": BEVEREN_RECEPTION,
         "/sarasin-clinic/ons-team/": "https://www.haarfillers.com/wp-content/uploads/2026/09/karen-sarasin.png",
         "/prijzen/": "https://www.haarfillers.com/wp-content/uploads/2022/11/SarasinClinic_interieur_Gent_02.jpg",
         "/reviews/": BEVEREN,
@@ -467,11 +469,21 @@ def feature_module(page):
             "https://www.haarfillers.com/wp-content/uploads/2023/09/2023-09_haarfiller-vrouw_01.jpg",
         ]
         tiles = ''.join(f'<figure><div class="comparison-labels" aria-hidden="true"><span>Voor</span><span>Na</span></div><img src="{escape(source_asset(u))}" alt="Voor en na een haarfillerbehandeling bij Sarasin Clinic" loading="lazy" decoding="async"></figure>' for u in urls)
-        return '<section class="feature-module results-module"><div class="module-heading"><p class="section-kicker">ECHTE RESULTATEN</p><h2>Bekijk de verandering van dichtbij.</h2><p>De beelden komen uit de bestaande Sarasin Clinic galerij. Resultaten verschillen per persoon.</p></div><div class="results-grid">'+tiles+'</div></section>'
+        return f'''<section class="feature-module results-module" id="nieuwe-resultaten">
+            <div class="module-heading"><h2>Bekijk de verandering van dichtbij.</h2>
+                <p>Voor-en-nafoto’s van Sarasin Clinic. Resultaten verschillen per persoon. Selecteer een foto om die op groot formaat te bekijken.</p>
+            </div>
+            {client_results_grid(RESULT_PHOTOS[:6])}
+            <details class="result-disclosure">
+                <summary>Bekijk meer voor-en-nafoto’s</summary>
+                {client_results_grid(RESULT_PHOTOS[6:])}
+            </details>
+            <div class="results-grid">{tiles}</div>
+        </section>'''
     if path == "/sarasin-clinic/":
         places = [
             ("Sint-Martens-Latem", "Kortrijksesteenweg 20, 9830 Sint-Martens-Latem", "/sarasin-clinic/gent/", "https://www.haarfillers.com/wp-content/uploads/2022/11/SarasinClinic_interieur_Gent_01.jpg"),
-            ("Beveren", "Gentseweg 436, 9120 Beveren", "/sarasin-clinic/beveren/", BEVEREN),
+            ("Beveren", "Gentseweg 436, 9120 Beveren", "/sarasin-clinic/beveren/", BEVEREN_WAITING),
         ]
         return '<section class="feature-module places-module"><div class="module-heading"><p class="section-kicker">TWEE LOCATIES</p><h2>Een plek waar je je op je gemak voelt.</h2></div><div class="places-grid">'+''.join(f'<a href="{link}"><img src="{escape(source_asset(im))}" alt="Sarasin Clinic {name}"><h3>{name} {ui_icon("arrow-up-right")}</h3><p>{address}</p></a>' for name,address,link,im in places)+'</div></section>'
     if path == "/sarasin-clinic/ons-team/":
@@ -492,12 +504,12 @@ def feature_module(page):
         gent = path.endswith("gent/")
         name = "Sint-Martens-Latem (Gent)" if gent else "Beveren"
         address = "Kortrijksesteenweg 20, 9830 Sint-Martens-Latem" if gent else "Gentseweg 436, 9120 Beveren"
-        first = "https://www.haarfillers.com/wp-content/uploads/2022/11/SarasinClinic_interieur_Gent_03.jpg" if gent else "/assets/beveren-reception.webp"
-        second = "https://www.haarfillers.com/wp-content/uploads/2022/11/SarasinClinic_interieur_Gent_05.jpg" if gent else "/assets/beveren-treatment.webp"
+        first = "https://www.haarfillers.com/wp-content/uploads/2022/11/SarasinClinic_interieur_Gent_03.jpg" if gent else BEVEREN_RECEPTION
+        second = "https://www.haarfillers.com/wp-content/uploads/2022/11/SarasinClinic_interieur_Gent_05.jpg" if gent else CLIENT_MEDIA + "beveren-behandelruimte-donkere-stoel.webp"
         map_url = "https://www.google.com/maps/search/?api=1&query=" + ("Kortrijksesteenweg+20+9830+Sint-Martens-Latem" if gent else "Gentseweg+436+9120+Beveren")
-        tour = "" if gent else f'<p><a class="inline-link" href="https://www.youtube.com/watch?v=mkb5j9Rtv8U">Bekijk de sneak peek van Beveren {ui_icon("arrow-up-right")}</a></p>'
         first_alt = "Interieur Sarasin Clinic " + name if gent else "Ontvangstbalie van Sarasin Clinic Beveren"
-        return f'''<section class="feature-module location-module"><div class="module-heading"><p class="section-kicker">BEZOEK ONS</p><h2>Voel je welkom in {name}.</h2></div><div class="location-layout"><div class="location-photos"><img src="{escape(source_asset(first))}" alt="{first_alt}"><img src="{escape(source_asset(second))}" alt="Behandelruimte Sarasin Clinic {name}"></div><div class="location-details"><p class="section-kicker">CONTACTGEGEVENS</p><h3>{name}</h3><p>{address}</p><p><a href="tel:+32476689799">+32 476 68 97 99</a><br><a href="mailto:welcome@sarasinclinic.com">welcome@sarasinclinic.com</a></p><a class="button-primary" href="{BOOK}">{BOOK_LABEL} {ui_icon("arrow-up-right")}</a><a class="inline-link" href="{map_url}" target="_blank" rel="noopener">Plan je route {ui_icon("arrow-up-right")}</a>{tour}</div></div></section>'''
+        extra = "" if gent else beveren_gallery()
+        return f'''<section class="feature-module location-module"><div class="module-heading"><p class="section-kicker">BEZOEK ONS</p><h2>Voel je welkom in {name}.</h2></div><div class="location-layout"><div class="location-photos"><img src="{escape(source_asset(first))}" alt="{first_alt}"><img src="{escape(source_asset(second))}" alt="Behandelruimte Sarasin Clinic {name}"></div><div class="location-details"><p class="section-kicker">CONTACTGEGEVENS</p><h3>{name}</h3><p>{address}</p><p><a href="tel:+32476689799">+32 476 68 97 99</a><br><a href="mailto:welcome@sarasinclinic.com">welcome@sarasinclinic.com</a></p><a class="button-primary" href="{BOOK}">{BOOK_LABEL} {ui_icon("arrow-up-right")}</a><a class="inline-link" href="{map_url}" target="_blank" rel="noopener">Plan je route {ui_icon("arrow-up-right")}</a></div></div>{extra}</section>'''
     if path == "/reviews/":
         shots = [f"https://www.haarfillers.com/wp-content/uploads/2026/01/haarfiller_review_{i}.png" for i in (1,2,3,4)]
         gallery = ''.join(f'<figure><img src="{escape(source_asset(u))}" alt="Bestaande Sarasin Clinic reviewafbeelding" loading="lazy"></figure>' for u in shots)
@@ -536,17 +548,41 @@ def home_treatment():
     </section>'''
 
 
+def client_result_image(case):
+    number, height, alt = case
+    path = f"{CLIENT_MEDIA}haarfiller-resultaat-{number}.webp"
+    return path, f'<img src="{path}" alt="{escape(alt)}" width="1080" height="{height}" loading="lazy" decoding="async">'
+
+
+def client_results_grid(cases):
+    links = []
+    for case in cases:
+        path, image = client_result_image(case)
+        links.append(f'<a href="{path}">{image}</a>')
+    return '<div class="client-media-grid client-results-grid">' + "".join(links) + '</div>'
+
+
+def beveren_gallery():
+    photos = "".join(
+        f'<img src="{CLIENT_MEDIA}{filename}" alt="{escape(alt)}" width="768" height="1024" loading="lazy" decoding="async">'
+        for filename, alt in BEVEREN_PHOTOS
+    )
+    return f'''<section class="beveren-gallery" id="beveren-in-beeld" aria-labelledby="beveren-gallery-title">
+        <div class="home-videos-heading">
+            <h2 id="beveren-gallery-title">Beveren in beeld</h2>
+            <a class="inline-link" href="{BEVEREN_TOUR}">Bekijk de video van Beveren {ui_icon("arrow-up-right")}</a>
+        </div>
+        <div class="client-media-grid">{photos}</div>
+    </section>'''
+
+
 def home_results():
-    cases = [
-        ("/assets/source/8905a3cd60.jpg", "De kruin van een man voor en na een haarfillerbehandeling", 653),
-        ("/assets/source/fe5b164a47.jpg", "De haarscheiding van een vrouw voor en na een haarfillerbehandeling", 800),
-    ]
     photos = "".join(
         f'''<figure class="home-result-card">
             <div class="home-result-labels" aria-hidden="true"><span>Voor</span><span>Na</span></div>
-            <img src="{photo}" alt="{alt}" width="800" height="{height}" loading="lazy" decoding="async">
+            {image}
         </figure>'''
-        for photo, alt, height in cases
+        for _, image in map(client_result_image, RESULT_PHOTOS[:2])
     )
     return f'''<section class="home-results" id="haarfiller-resultaten" aria-labelledby="home-results-title">
         <div class="home-preview-heading">
@@ -599,7 +635,7 @@ def home_essentials():
 def home_clinic():
     locations = [
         ("Gent", "Sint-Martens-Latem", "/sarasin-clinic/gent/", "/assets/source/aec4456964.jpg", "Behandelruimte van Sarasin Clinic bij Gent"),
-        ("Beveren", "Regio Antwerpen", "/sarasin-clinic/beveren/", BEVEREN, "Wachtruimte van Sarasin Clinic in Beveren"),
+        ("Beveren", "Regio Antwerpen", "/sarasin-clinic/beveren/", BEVEREN_WAITING, "Wachtruimte van Sarasin Clinic in Beveren"),
     ]
     cards = "".join(
         f'''<a href="{url}" class="clinic-preview">
@@ -639,8 +675,14 @@ def home_reviews():
 
 
 def home_video_gallery(archive=False):
+    clinic_clips = tuple(
+        (title, f"clinic-media/haarfiller-{slug}-poster.webp",
+         f"{CLIENT_MEDIA}haarfiller-{slug}.mp4", "", description)
+        for title, slug, description in CLIENT_CLIPS
+    )
+    clips = clinic_clips + CLIPS if archive else (CLIPS[0], *clinic_clips[:2], CLIPS[1], clinic_clips[3])
     cards = []
-    for title, poster, url, youtube_id, description in CLIPS:
+    for title, poster, url, youtube_id, description in clips:
         embed = f' data-youtube="{youtube_id}"' if youtube_id else ""
         cards.append(f'''<a class="video-preview" href="{url}"{embed}>
             <span class="video-preview-media">
