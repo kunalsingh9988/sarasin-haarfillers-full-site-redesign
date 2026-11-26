@@ -634,8 +634,10 @@ def home_essentials():
 
 def home_clinic():
     locations = [
-        ("Gent", "Sint-Martens-Latem", "/sarasin-clinic/gent/", "/assets/source/aec4456964.jpg", "Behandelruimte van Sarasin Clinic bij Gent"),
-        ("Beveren", "Regio Antwerpen", "/sarasin-clinic/beveren/", BEVEREN_WAITING, "Wachtruimte van Sarasin Clinic in Beveren"),
+        ("Gent", "Sint-Martens-Latem", "/sarasin-clinic/gent/", "/assets/source/92cb20e22b.jpg",
+         "Lichte behandelruimte met een witte behandelstoel bij Sarasin Clinic in Sint-Martens-Latem"),
+        ("Beveren", "Regio Antwerpen", "/sarasin-clinic/beveren/", CLIENT_MEDIA + "beveren-wachtruimte-overzicht.webp",
+         "Wachtruimte van Sarasin Clinic Beveren met een bank, lage tafel en verlicht Sarasin-monogram"),
     ]
     cards = "".join(
         f'''<a href="{url}" class="clinic-preview">
