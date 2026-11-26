@@ -5,6 +5,40 @@ BEVEREN_WAITING = CLIENT_MEDIA + "beveren-wachtruimte.webp"
 BEVEREN_RECEPTION = CLIENT_MEDIA + "beveren-onthaal.webp"
 BEVEREN_TOUR = "https://www.youtube.com/watch?v=mkb5j9Rtv8U"
 
+# Larger versions listed in the original gallery's responsive image sources.
+ARCHIVE_RESULT_PHOTOS = {
+    "9f042ab806": ("2026/01/haarfillers_reviews_ervaringen.jpeg", 1080, 1350, 240,
+                   "Twee bovenaanzichten van een kruin met grijsbruin haar, vóór en na"),
+    "2870d774e2": ("2025/03/Instagram-post-2025-1.jpg", 1080, 1080, 300,
+                   "Voor-en-nafoto’s van lichtbruin haar, met de datums oktober 2023 en oktober 2024"),
+    "73fc04018e": ("2025/04/6.jpg", 1080, 1021, 300,
+                   "Voor- en nafoto van de middenscheiding bij donkerbruin haar"),
+    "3263692cf9": ("2025/05/haartransplantatie_voor_en_na-1024x1024.jpg", 1024, 1024, 300,
+                   "Twee foto’s van golvend bruin haar op de kruin"),
+    "dbf05320f1": ("2025/05/9953EDEA-9FDA-4F15-AB9B-A97840F7DE72.jpg", 1080, 1080, 300,
+                   "Twee bovenaanzichten van kort bruin haar met de haarlijn in beeld"),
+    "707e8ac6b1": ("2025/02/IMG_3133-1024x1024.jpg", 1024, 1024, 300,
+                   "Foto’s naast elkaar van lichtbruin haar dat bij de kruin opzij wordt gehouden"),
+    "8408a84f00": ("2025/02/IMG_3131-1024x1024.jpg", 1024, 1024, 300,
+                   "Voor- en nafoto van de middenscheiding bij lichtbruin haar"),
+    "2fb88178fd": ("2026/01/4-2.jpeg", 1080, 1350, 240,
+                   "Twee foto’s van de kruin van een man voor en na een behandeling"),
+    "870a44decc": ("2026/01/haarkliniek-antwerpen.jpeg", 1080, 1350, 240,
+                   "Vergelijking van twee bovenaanzichten van een kruin met kort donker haar"),
+    "b4ed0e0811": ("2026/01/instagram-feed-SC-59-2.jpeg", 1080, 1350, 240,
+                   "Hairfillerfotopaar van een kruin met bruin haar"),
+    "5e7eea315f": ("2025/06/haartransplantatie-gent.jpeg", 1080, 1080, 300,
+                   "Twee bovenaanzichten van een kruin met donker haar"),
+    "ebe9cd3f66": ("2024/11/Sarasin-Beauty-21.jpg", 1080, 1080, 300,
+                   "Voor-en-nafoto’s van een kruin met bruin haar, met het haar opzij gehouden"),
+    "77e2a2109a": ("2024/10/De-oorzaken-van-haaruitval-bij-mannen-uitgelegd.jpeg", 1067, 780, 300,
+                   "Drie bovenaanzichten van dezelfde kruin"),
+    "f93a726ee6": ("2024/02/IMG_7261-1024x1024.jpg", 1024, 1024, 300,
+                   "Twee bovenaanzichten van een kruin met kort haar op verschillende momenten"),
+    "cae32daa94": ("2024/09/2-7.png", 1080, 1080, 300,
+                   "Twee bovenaanzichten van het krullende haar van Riadh Bahri"),
+}
+
 # Clinic-supplied comparisons. Keep the original layout and labels on each image.
 RESULT_PHOTOS = (
     ("01", 1080, "Voor en na naast elkaar, met donker haar dat bij de kruin opzij wordt gehouden"),

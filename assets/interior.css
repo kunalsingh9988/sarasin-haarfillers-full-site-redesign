@@ -105,8 +105,17 @@
 .article-shell .source-content table { table-layout: fixed; }
 .article-shell .source-content :is(td, th) { overflow-wrap: anywhere; }
 
-.article-shell .source-content:has(.gent-clinic-gallery) { max-width: none; }
-.gent-clinic-article > :not(.gent-clinic-gallery) { max-width: 880px; }
+.article-shell .source-content:has(.gent-clinic-gallery, .source-results-gallery) { max-width: none; }
+.gent-clinic-article > :not(.gent-clinic-gallery),
+.source-results-article > :not(.source-results-gallery) { max-width: 880px; }
+
+.source-results-gallery { margin-block: 24px 48px; }
+.article-shell .source-results-gallery img { margin: 0; }
+
+@media (641px <= width <= 1050px) {
+  .source-results-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .source-results-gallery .client-results-row { display: contents; }
+}
 
 .gent-clinic-gallery {
   display: grid;

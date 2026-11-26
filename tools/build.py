@@ -15,7 +15,7 @@ import requests
 from bs4 import BeautifulSoup, Comment
 
 from blog_content import POSTS, TREATMENT
-from media_content import (BEVEREN_PHOTOS, BEVEREN_RECEPTION, BEVEREN_TOUR, BEVEREN_WAITING,
+from media_content import (ARCHIVE_RESULT_PHOTOS, BEVEREN_PHOTOS, BEVEREN_RECEPTION, BEVEREN_TOUR, BEVEREN_WAITING,
                            CLIENT_CLIPS, CLIENT_MEDIA, CLIPS, IMAGE_ALT, RESULT_PHOTOS,
                            VIDEO_DESCRIPTIONS)
 
@@ -580,16 +580,56 @@ def client_result_image(case):
     return path, f'<img src="{path}" alt="{escape(alt)}" width="1080" height="{height}" loading="lazy" decoding="async">'
 
 
-def client_results_grid(cases):
+def result_photo_grid(photos, class_name="client-results-grid"):
     rows = []
-    for start in range(0, len(cases), 3):
-        links = []
-        for case in cases[start:start + 3]:
-            path, image = client_result_image(case)
-            ratio = 1080 / case[1]
-            links.append(f'<a href="{path}" style="--photo-ratio: {ratio:.6f}">{image}</a>')
+    for start in range(0, len(photos), 3):
+        links = [
+            f'<a href="{escape(path)}" style="--photo-ratio: {ratio:.6f}">{image}</a>'
+            for path, image, ratio in photos[start:start + 3]
+        ]
         rows.append('<div class="client-results-row">' + "".join(links) + '</div>')
-    return '<div class="client-results-grid">' + "".join(rows) + '</div>'
+    return f'<div class="{class_name}">' + "".join(rows) + '</div>'
+
+
+def client_results_grid(cases):
+    return result_photo_grid([(*client_result_image(case), 1080 / case[1]) for case in cases])
+
+
+def group_archived_result_photos(body):
+    first = next((image for image in body.select("img[src]")
+                  if Path(image["src"]).stem in ARCHIVE_RESULT_PHOTOS), None)
+    if first is None:
+        return
+    originals = [first]
+    for sibling in first.find_next_siblings():
+        if sibling.name != "img":
+            break
+        originals.append(sibling)
+
+    container = first.parent
+    if container.name == "span":
+        container.name = "div"
+    container["class"] = [*container.get("class", []), "source-results-article"]
+    photos = []
+    for image in originals:
+        thumb = image["src"]
+        details = ARCHIVE_RESULT_PHOTOS.get(Path(thumb).stem)
+        if details:
+            filename, width, height, thumb_width, alt = details
+            full = source_asset(f"{BASE}/wp-content/uploads/{filename}")
+            image.attrs.update(
+                src=full, alt=alt, width=str(width), height=str(height), decoding="async",
+                srcset=f"{thumb} {thumb_width}w, {full} {width}w",
+                sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1050px) 47vw, 34vw",
+            )
+        width, height = (image.get(key, "") for key in ("width", "height"))
+        ratio = int(width) / int(height) if width.isdecimal() and height.isdecimal() and int(height) else 1
+        photos.append((image["src"], str(image), ratio))
+
+    gallery = result_photo_grid(photos, "client-results-grid source-results-gallery")
+    first.insert_before(BeautifulSoup(gallery, "html.parser").div)
+    for image in originals:
+        image.extract()
 
 
 def beveren_gallery():
@@ -928,6 +968,8 @@ def page_html(page, library):
         add_article_photos(body, page, photo)
     if path == "/sarasin-clinic/gent/":
         group_gent_clinic_photos(body)
+    if path == "/voor-en-na/":
+        group_archived_result_photos(body)
     article_heading = f'<div class="article-lead"><h2>{title}</h2></div>' if path in SHORT_TITLES and not is_home else ''
     sidebar = f'''<aside class="article-aside"><p>Op deze pagina</p><nav aria-label="Op deze pagina">{"".join(contents)}</nav></aside>''' if contents else ""
     article = home_essentials() + home_clinic() if is_home else f'''<section class="article-shell" id="pagina-informatie">
