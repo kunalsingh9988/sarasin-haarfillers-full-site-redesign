@@ -411,6 +411,32 @@ def add_article_photos(body, page, hero):
             break
 
 
+def group_gent_clinic_photos(body):
+    heading = next(
+        (item for item in body.find_all("h2")
+         if item.get_text(" ", strip=True).startswith("Kijk binnen in onze privépraktijk")),
+        None,
+    )
+    if heading is None:
+        return
+    photos = []
+    for sibling in heading.find_next_siblings():
+        if sibling.name != "img":
+            break
+        photos.append(sibling)
+    if not photos:
+        return
+
+    clinic_article = heading.parent
+    if clinic_article.name == "span":
+        clinic_article.name = "div"
+    clinic_article["class"] = [*clinic_article.get("class", []), "gent-clinic-article"]
+    gallery = body.new_tag("div", attrs={"class": "gent-clinic-gallery"})
+    heading.insert_after(gallery)
+    for photo in photos:
+        gallery.append(photo.extract())
+
+
 def editorial_hero(page, title, desc, photo):
     path = page["path"]
     if path in TEXT_ONLY_ROUTES:
@@ -896,6 +922,8 @@ def page_html(page, library):
             missing_faq["href"] = "/faq/#vragen-haarverlies"
     if not is_home:
         add_article_photos(body, page, photo)
+    if path == "/sarasin-clinic/gent/":
+        group_gent_clinic_photos(body)
     article_heading = f'<div class="article-lead"><h2>{title}</h2></div>' if path in SHORT_TITLES and not is_home else ''
     sidebar = f'''<aside class="article-aside"><p>Op deze pagina</p><nav aria-label="Op deze pagina">{"".join(contents)}</nav></aside>''' if contents else ""
     article = home_essentials() + home_clinic() if is_home else f'''<section class="article-shell" id="pagina-informatie">

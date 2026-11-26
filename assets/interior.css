@@ -105,6 +105,27 @@
 .article-shell .source-content table { table-layout: fixed; }
 .article-shell .source-content :is(td, th) { overflow-wrap: anywhere; }
 
+.article-shell .source-content:has(.gent-clinic-gallery) { max-width: none; }
+.gent-clinic-article > :not(.gent-clinic-gallery) { max-width: 880px; }
+
+.gent-clinic-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(10px, 1.7vw, 24px);
+  margin-block: 20px;
+}
+
+.article-shell .source-content .gent-clinic-gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+@media (max-width: 1050px) {
+  .gent-clinic-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 .article-shell .editorial-photo {
   width: fit-content;
   max-width: 100%;
