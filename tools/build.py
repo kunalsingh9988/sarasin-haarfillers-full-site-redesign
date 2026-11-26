@@ -581,11 +581,15 @@ def client_result_image(case):
 
 
 def client_results_grid(cases):
-    links = []
-    for case in cases:
-        path, image = client_result_image(case)
-        links.append(f'<a href="{path}">{image}</a>')
-    return '<div class="client-media-grid client-results-grid">' + "".join(links) + '</div>'
+    rows = []
+    for start in range(0, len(cases), 3):
+        links = []
+        for case in cases[start:start + 3]:
+            path, image = client_result_image(case)
+            ratio = 1080 / case[1]
+            links.append(f'<a href="{path}" style="--photo-ratio: {ratio:.6f}">{image}</a>')
+        rows.append('<div class="client-results-row">' + "".join(links) + '</div>')
+    return '<div class="client-results-grid">' + "".join(rows) + '</div>'
 
 
 def beveren_gallery():
