@@ -15,6 +15,7 @@ import requests
 from bs4 import BeautifulSoup, Comment
 
 from blog_content import POSTS, TREATMENT
+from women_page import render_women
 from media_content import (ARCHIVE_RESULT_PHOTOS, BEVEREN_PHOTOS, BEVEREN_RECEPTION, BEVEREN_TOUR, BEVEREN_WAITING,
                            CLIENT_CLIPS, CLIENT_MEDIA, CLIPS, IMAGE_ALT, RESULT_PHOTOS,
                            VIDEO_DESCRIPTIONS)
@@ -906,9 +907,16 @@ def page_html(page, library):
     seo_description = escape("Merk je dat je haar dunner wordt of dat je meer haar verliest? Lees over mogelijke oorzaken en plan een haarconsult bij Sarasin Clinic in Gent of Beveren." if is_home else page.get("seo_description") or page["description"] or page.get("intro", "")[:155] or page["title"])
     robots = "noindex,follow" if path in TEXT_ONLY_ROUTES else "index,follow,max-image-preview:large"
     blog_css = '<link rel="stylesheet" href="/assets/blog.css">' if page.get("blog") or is_home else ''
-    head = f'''<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#18352d"><meta name="robots" content="{robots}"><title>{seo_title} | Sarasin Clinic</title><meta name="description" content="{seo_description}"><link rel="canonical" href="{canonical}"><link rel="icon" href="/assets/sarasin-clinic-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">{priority_css}{interior_css}<link rel="stylesheet" href="/assets/patient.css">{blog_css}<script defer src="/assets/site.js"></script></head><body class="page-{category(path)} {route_class}">'''
+    women_assets = (
+        '<link rel="stylesheet" href="/assets/women.css"><script defer src="/assets/women.js"></script>'
+        if path == "/vrouwen/" else ""
+    )
+    head = f'''<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#18352d"><meta name="robots" content="{robots}"><title>{seo_title} | Sarasin Clinic</title><meta name="description" content="{seo_description}"><link rel="canonical" href="{canonical}"><link rel="icon" href="/assets/sarasin-clinic-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">{priority_css}{interior_css}<link rel="stylesheet" href="/assets/patient.css">{blog_css}<script defer src="/assets/site.js"></script>{women_assets}</head><body class="page-{category(path)} {route_class}">'''
     if page.get("blog"):
         return head + nav() + '<main id="hoofdinhoud">' + blog_page(page) + '</main>' + footer() + '</body></html>'
+    if path == "/vrouwen/":
+        women = render_women(page["body"], display_title, desc, BOOK, BOOK_LABEL, ui_icon)
+        return head + nav() + '<main id="hoofdinhoud" class="women-feature">' + women + '</main>' + footer() + '</body></html>'
     photo = hero_image(page) if not is_home else None
     hero_copy = f'''<div class="hero-inner"><h1>{display_title}</h1><p class="hero-intro">{desc}</p><div class="hero-actions"><a class="button-primary" href="{BOOK}">{BOOK_LABEL} {ui_icon("arrow-up-right")}</a><a class="button-text" href="/voor-en-na/">Bekijk resultaten {ui_icon("arrow-up-right")}</a></div></div>'''
     if is_home:
