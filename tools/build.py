@@ -15,7 +15,7 @@ import requests
 from bs4 import BeautifulSoup, Comment
 
 from blog_content import POSTS, TREATMENT
-from women_page import render_women
+from women_page import render_treatment
 from media_content import (ARCHIVE_RESULT_PHOTOS, BEVEREN_PHOTOS, BEVEREN_RECEPTION, BEVEREN_TOUR, BEVEREN_WAITING,
                            CLIENT_CLIPS, CLIENT_MEDIA, CLIPS, IMAGE_ALT, RESULT_PHOTOS,
                            VIDEO_DESCRIPTIONS)
@@ -219,7 +219,7 @@ def hero_image(page):
     for image in page["images"]:
         low = image.lower()
         if not any(x in low for x in ["review", "zone", "logo", ".svg"]): return image
-    return "/assets/treatment-process.png"
+    return BEVEREN_RECEPTION
 
 
 def escape(s): return html.escape(s or "", quote=True)
@@ -289,7 +289,7 @@ def nav():
 
 
 def footer():
-    return f'''<footer class="site-footer"><div class="footer-top"><div>{brand_markup()}<p>Haarfillers met persoonlijk advies in Gent en Beveren.</p></div><div><h2>Ontdek</h2><a href="/mannen/">Voor mannen</a><a href="/vrouwen/">Voor vrouwen</a><a href="/voor-en-na/">Resultaten</a><a href="/prijzen/">Prijzen</a><a href="/faq/">FAQ</a><a href="/blog/">Blog</a></div><div><h2>Bezoek</h2><a href="/sarasin-clinic/gent/">Sint-Martens-Latem (Gent)</a><a href="/sarasin-clinic/beveren/">Beveren</a><a href="/sarasin-clinic/ons-team/">Ons team</a><a href="mailto:welcome@sarasinclinic.com">welcome@sarasinclinic.com</a></div></div><div class="footer-bottom"><span>© 2026 Sarasin Clinic · BE 0681.553.375</span><a href="/privacy-policy/">Privacy Policy</a><a href="/cookie-policy-eu/">Cookiebeleid</a><span>Beeldmateriaal: echte Sarasin-resultaten waar vermeld; behandelingsillustratie is gegenereerd.</span></div></footer>'''
+    return f'''<footer class="site-footer"><div class="footer-top"><div>{brand_markup()}<p>Haarfillers met persoonlijk advies in Gent en Beveren.</p></div><div><h2>Ontdek</h2><a href="/mannen/">Voor mannen</a><a href="/vrouwen/">Voor vrouwen</a><a href="/voor-en-na/">Resultaten</a><a href="/prijzen/">Prijzen</a><a href="/faq/">FAQ</a><a href="/blog/">Blog</a></div><div><h2>Bezoek</h2><a href="/sarasin-clinic/gent/">Sint-Martens-Latem (Gent)</a><a href="/sarasin-clinic/beveren/">Beveren</a><a href="/sarasin-clinic/ons-team/">Ons team</a><a href="mailto:welcome@sarasinclinic.com">welcome@sarasinclinic.com</a></div></div><div class="footer-bottom"><span>© 2026 Sarasin Clinic · BE 0681.553.375</span><a href="/privacy-policy/">Privacy Policy</a><a href="/cookie-policy-eu/">Cookiebeleid</a><span>Voor-en-nafoto’s tonen individuele resultaten.</span></div></footer>'''
 
 
 def brand_markup():
@@ -297,16 +297,17 @@ def brand_markup():
 
 
 def patient_concerns():
-    image_descriptions = {
-        "dunner-haar": "Vrouw houdt haar fijne paardenstaart vast",
-        "plots-haarverlies": "Losse haren in een houten haarborstel",
-        "bredere-scheiding": "Bovenaanzicht van haar met een bredere middenscheiding",
+    photos = {
+        "dunner-haar": ("/assets/source/393161444f.png", "Vrouw houdt bruin haar opzij", 750, 300),
+        "plots-haarverlies": ("/assets/source/3f7fd8c9b4.jpg", "Losse haren op een lichte ondergrond", 1200, 1200),
+        "bredere-scheiding": ("/assets/source/421b3e41ed.png", "Behandelaar houdt het haar opzij om de hoofdhuid te bekijken", 750, 300),
     }
     cards = []
     for anchor, concern, question, text, url, label in CONCERNS:
+        photo, alt, width, height = photos[anchor]
         cards.append(f'''<article class="concern-card">
             <a class="concern-trigger" href="#{anchor}">
-                <img src="/assets/concern-{anchor}.webp" alt="{escape(image_descriptions[anchor])}" width="864" height="487" loading="lazy" decoding="async">
+                <img src="{photo}" alt="{escape(alt)}" width="{width}" height="{height}" loading="lazy" decoding="async">
                 <span>{escape(concern)} {ui_icon("arrow-right")}</span>
             </a>
             <div class="patient-answer concern-answer" id="{anchor}" tabindex="-1">
@@ -318,7 +319,7 @@ def patient_concerns():
     return f'''<section class="patient-section home-concerns" aria-labelledby="patient-concerns">
         <h2 id="patient-concerns">Wat merk jij aan je haar?</h2>
         <div class="concern-grid">{"".join(cards)}</div>
-        <p class="concern-disclosure">Illustratieve beelden.</p>
+        <p class="concern-disclosure">Foto’s van Sarasin Clinic.</p>
     </section>'''
 
 
@@ -460,8 +461,8 @@ def editorial_hero(page, title, desc, photo):
     caption = captions.get(path, "")
     if page.get("clinic_original"):
         caption = "Behandelruimte van Sarasin Clinic Beveren"
-    if photo == "/assets/treatment-process.png":
-        caption = "Illustratie van een consultatie"
+    if photo == BEVEREN_RECEPTION:
+        caption = "Onthaal van Sarasin Clinic Beveren"
     alt = caption or next((img.get("alt") for img in BeautifulSoup(page["body"], "html.parser").find_all("img") if img.get("src") == photo and img.get("alt")), "")
     primary = f'<a class="button-primary" href="{BOOK}">{BOOK_LABEL} {ui_icon("arrow-up-right")}</a>'
     return f'''<section class="hero editorial-hero">
@@ -907,16 +908,16 @@ def page_html(page, library):
     seo_description = escape("Merk je dat je haar dunner wordt of dat je meer haar verliest? Lees over mogelijke oorzaken en plan een haarconsult bij Sarasin Clinic in Gent of Beveren." if is_home else page.get("seo_description") or page["description"] or page.get("intro", "")[:155] or page["title"])
     robots = "noindex,follow" if path in TEXT_ONLY_ROUTES else "index,follow,max-image-preview:large"
     blog_css = '<link rel="stylesheet" href="/assets/blog.css">' if page.get("blog") or is_home else ''
-    women_assets = (
+    treatment_assets = (
         '<link rel="stylesheet" href="/assets/women.css"><script defer src="/assets/women.js"></script>'
-        if path == "/vrouwen/" else ""
+        if path in {"/vrouwen/", "/mannen/"} else ""
     )
-    head = f'''<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#18352d"><meta name="robots" content="{robots}"><title>{seo_title} | Sarasin Clinic</title><meta name="description" content="{seo_description}"><link rel="canonical" href="{canonical}"><link rel="icon" href="/assets/sarasin-clinic-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">{priority_css}{interior_css}<link rel="stylesheet" href="/assets/patient.css">{blog_css}<script defer src="/assets/site.js"></script>{women_assets}</head><body class="page-{category(path)} {route_class}">'''
+    head = f'''<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#18352d"><meta name="robots" content="{robots}"><title>{seo_title} | Sarasin Clinic</title><meta name="description" content="{seo_description}"><link rel="canonical" href="{canonical}"><link rel="icon" href="/assets/sarasin-clinic-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">{priority_css}{interior_css}<link rel="stylesheet" href="/assets/patient.css">{blog_css}<script defer src="/assets/site.js"></script>{treatment_assets}</head><body class="page-{category(path)} {route_class}">'''
     if page.get("blog"):
         return head + nav() + '<main id="hoofdinhoud">' + blog_page(page) + '</main>' + footer() + '</body></html>'
-    if path == "/vrouwen/":
-        women = render_women(page["body"], display_title, desc, BOOK, BOOK_LABEL, ui_icon)
-        return head + nav() + '<main id="hoofdinhoud" class="women-feature">' + women + '</main>' + footer() + '</body></html>'
+    if treatment_assets:
+        treatment = render_treatment(page["body"], display_title, desc, BOOK, BOOK_LABEL, ui_icon, men=path == "/mannen/")
+        return head + nav() + '<main id="hoofdinhoud" class="women-feature">' + treatment + '</main>' + footer() + '</body></html>'
     photo = hero_image(page) if not is_home else None
     hero_copy = f'''<div class="hero-inner"><h1>{display_title}</h1><p class="hero-intro">{desc}</p><div class="hero-actions"><a class="button-primary" href="{BOOK}">{BOOK_LABEL} {ui_icon("arrow-up-right")}</a><a class="button-text" href="/voor-en-na/">Bekijk resultaten {ui_icon("arrow-up-right")}</a></div></div>'''
     if is_home:
@@ -1092,7 +1093,7 @@ def enrich_media(soup):
             image["alt"] = alt
             changed = True
     for link in soup.select('main a[href*="youtube.com/"], main a[href*="youtu.be/"]'):
-        if "video-preview" in link.get("class", []):
+        if {"video-preview", "wf-video-card"} & set(link.get("class", [])):
             continue
         url = urlparse(link["href"])
         if url.hostname not in {"www.youtube.com", "youtube.com", "youtu.be"}:

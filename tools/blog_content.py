@@ -32,7 +32,7 @@ POSTS = (
         "waarom-valt-mijn-haar-uit", "Waarom valt mijn haar uit?", "Haaruitval",
         "Lees wat meer haren in je borstel of zichtbaar dunner haar kunnen betekenen, welke oorzaken mogelijk zijn en wanneer je hulp kunt vragen.",
         "Je haar kan uitvallen door erfelijke aanleg, ziekte, een bevalling, bepaalde medicijnen of andere oorzaken. Merk je duidelijk meer haarverlies, wordt je haar dunner of ontstaan er kale plekken? Dan kan je huisarts helpen uitzoeken wat er speelt.",
-        "/assets/concern-dunner-haar.webp", "Vrouw houdt haar fijne paardenstaart vast", "Illustratief beeld",
+        "/assets/source/393161444f.png", "Vrouw houdt bruin haar opzij", "Sarasin Clinic",
         (
             ("Wat is het verschil tussen uitval en dunner wordend haar?",
              "Meer losse haren op je kussen of in de douche kunnen betekenen dat je tijdelijk meer haren verliest. Een steeds zichtbaardere hoofdhuid of een bredere scheiding wijst op een verandering in de dichtheid. De twee kunnen tegelijk voorkomen."),
@@ -49,7 +49,7 @@ POSTS = (
         "wanneer-haaruitval-laten-onderzoeken", "Wanneer laat ik haaruitval onderzoeken?", "Haaruitval",
         "Weet bij plots haarverlies, kale plekken of hoofdhuidklachten wanneer je je huisarts belt en welke informatie nuttig is voor je afspraak.",
         "Maak een afspraak met je huisarts als je plots veel meer haar verliest, kale plekken krijgt of merkt dat je haar zichtbaar dunner wordt. Vertel het ook als je hoofdhuid pijnlijk, rood of schilferig is, of als je je zorgen maakt.",
-        "/assets/concern-plots-haarverlies.webp", "Losse haren in een houten haarborstel", "Illustratief beeld",
+        "/assets/source/3f7fd8c9b4.jpg", "Losse haren op een lichte ondergrond", "Sarasin Clinic",
         (
             ("Waar let een arts op?",
              "Je arts vraagt hoe lang de verandering al opvalt, hoe snel ze is ontstaan en of haarverlies ook bij familieleden voorkomt. Het patroon, de conditie van de hoofdhuid en eventuele andere klachten kunnen helpen kiezen welk onderzoek nodig is."),
@@ -66,7 +66,7 @@ POSTS = (
         "mijn-haarscheiding-wordt-breder", "Mijn haarscheiding wordt breder. Wat betekent dat?", "Haaruitval",
         "Een bredere haarscheiding, dunnere paardenstaart of zichtbaardere hoofdhuid? Lees wat die veranderingen kunnen betekenen.",
         "Een bredere haarscheiding kan erop wijzen dat het haar bovenop dunner wordt. Erfelijke haarverdunning is één mogelijke verklaring. Laat aanhoudende of opvallende veranderingen beoordelen zodat je weet welke oorzaak aannemelijk is.",
-        "/assets/concern-bredere-scheiding.webp", "Bovenaanzicht van haar met zichtbare middenscheiding", "Illustratief beeld",
+        "/assets/source/421b3e41ed.png", "Behandelaar houdt het haar opzij om de hoofdhuid te bekijken", "Sarasin Clinic",
         (
             ("Welke veranderingen vallen vaak samen op?",
              "Je merkt misschien ook minder volume wanneer je je haar samenbindt of ziet je hoofdhuid duidelijker bij helder licht. Het is nuttig om op te merken of het vooral bij de scheiding, de kruin of op meerdere plekken gebeurt."),
@@ -132,7 +132,7 @@ POSTS = (
         "haarfiller-nazorg", "Wanneer mag ik mijn haar wassen na Hairfiller?", "Nazorg",
         "Welke vragen stel je over haar wassen, kleuren en sporten na Hairfiller? Lees wat je vooraf met je behandelaar kunt afspreken.",
         "Op de behandelpagina adviseert Sarasin Clinic om na Hairfiller 24 uur te wachten met haar wassen. Volg de persoonlijke instructies bij je afspraak als die afwijken. Vraag ook wanneer je je haar weer mag kleuren of stylingproducten mag gebruiken.",
-        "/assets/concern-plots-haarverlies.webp", "Houten haarborstel op een badkamerblad", "Illustratief beeld",
+        "/assets/price-treatment-scalp.webp", "Behandelaar met handschoenen bij de hoofdhuid", "Sarasin Clinic",
         (
             ("Welke afspraken maak je vooraf?",
              "Vraag de clinic hoe je je hoofdhuid voorbereidt en of je vooraf rekening moet houden met bepaalde producten of andere behandelingen. Bespreek medicatie en gevoeligheden met je behandelaar."),

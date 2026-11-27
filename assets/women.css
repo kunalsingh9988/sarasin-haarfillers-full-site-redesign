@@ -105,8 +105,8 @@
   background: var(--wf-warm);
 }
 .wf-photo figcaption { margin-top: 8px; color: var(--wf-muted); font-size: 12px; }
-.wf-photo--hero img { aspect-ratio: 1.39; object-position: center 44%; }
-.wf-photo--portrait img { aspect-ratio: 4 / 5; object-position: center 38%; }
+.wf-photo--hero img { aspect-ratio: 1.39; object-fit: contain; object-position: center; }
+.wf-photo--portrait img { aspect-ratio: 1.44; object-position: center; }
 .wf-photo--clinical img { aspect-ratio: 1.2; object-position: center 42%; }
 .wf-photo--anatomy img { aspect-ratio: 600 / 511; object-fit: contain; background: #fff; }
 .wf-photo--anatomy figcaption a { text-underline-offset: 3px; }
@@ -426,7 +426,7 @@
   .wf-hero h1 { max-width: 18ch; font-size: clamp(38px, 9vw, 54px); }
   .wf-hero .wf-lead { margin-top: 12px; }
   .wf-hero .wf-actions { gap: 8px 16px; margin-top: 16px; }
-  .wf-photo--hero img { aspect-ratio: 1.45; object-position: center 42%; }
+  .wf-photo--hero img { aspect-ratio: 1.25; }
   .wf-sticky > div { flex-wrap: nowrap; justify-content: space-between; gap: 5px; }
   .wf-sticky a { flex: 0 0 auto; white-space: nowrap; }
   .wf-sticky .wf-desktop-jump { display: none; }
@@ -439,7 +439,7 @@
   .wf-split, .wf-longevity .wf-split, .wf-expert, .wf-understanding, .wf-clinical,
   .wf-results-layout, .wf-journey-top, .wf-video-layout, .wf-faq, .wf-closing { grid-template-columns: minmax(0, 1fr); }
   .wf-understanding .wf-photo { order: 2; }
-  .wf-photo--portrait img { aspect-ratio: 1.34; object-position: 50% 33%; }
+  .wf-photo--portrait img { aspect-ratio: 1.44; }
   .wf-science .wf-photo { order: 2; }
   .wf-concern-grid { gap: 15px; }
   .wf-results-layout { grid-template-areas: "intro" "gallery" "controls"; grid-template-rows: auto; }
